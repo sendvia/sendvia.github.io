@@ -7,10 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- LOGO -->
-    <!-- Light mode -->
   <link rel="icon" href="logo-black.png" type="image/png" sizes="64x64" media="(prefers-color-scheme: light)">
-    <!-- Dark mode -->
   <link rel="icon" href="logo-white.png" type="image/png" sizes="64x64" media="(prefers-color-scheme: dark)">
   <style>
     * {
@@ -32,13 +29,13 @@
     }
 
     body {
-      font-family:Inter,system-ui,sans-serif;
-      background:radial-gradient(circle at top,#1a1a1a,#0a0a0a 70%);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(circle at top, #1a1a1a, #0a0a0a 70%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
     .container {
@@ -62,11 +59,8 @@
       color: #333;
       margin-bottom: 10px;
       font-size: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      text-align: center;
+      font-weight: 700;
     }
 
     .subtitle {
@@ -96,10 +90,6 @@
       transition: all 0.3s;
       background: #f9fafb;
     }
-    .drop-zone-hint {
-      color: #999;
-      font-size: 13px;
-    }
 
     .drop-zone:hover {
       border-color: black;
@@ -117,7 +107,12 @@
       color: #222222;
       font-size: 18px;
       font-weight: 600;
-      margin-bottom: 1px;
+      margin-bottom: 8px;
+    }
+
+    .drop-zone-hint {
+      color: #999;
+      font-size: 13px;
     }
 
     .file-input {
@@ -161,7 +156,7 @@
       color: #424242;
       font-family: monospace;
       font-weight: 700;
-      letter-spacing: 8px;
+      letter-spacing: 5px;
     }
     
     @media (max-width: 600px) {
@@ -184,22 +179,23 @@
       color: white;
       border: none;
       border-radius: 10px;
-      padding: 10px 20px;
+      padding: 12px 20px;
       font-family: Inter, system-ui, sans-serif;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.2s;
       width: 100%;
       margin-top: 10px;
     }
 
     .btn:hover {
-      transform: scale(1.01);
+      background: rgb(40, 40, 40);
+      transform: translateY(-1px);
     }
 
     .btn:active {
-      transform: scale(1);
+      transform: translateY(0);
     }
 
     .btn:disabled {
@@ -223,22 +219,19 @@
     .status.info {
       background: #e3f2fd;
       color: #1976d2;
-      border-radius: 10px;
-      border: 1.5px solid #1976d2;
+      border: 1.5px solid #90caf9;
     }
 
     .status.success {
       background: #e8f5e9;
       color: #388e3c;
-      border-radius: 10px;
-      border: 1.5px solid #388E3C;
+      border: 1.5px solid #81c784;
     }
 
     .status.error {
       background: #ffebee;
       color: #c62828;
-      border-radius: 10px;
-      border: 1.5px solid #c62828;
+      border: 1.5px solid #e57373;
     }
 
     .progress-bar {
@@ -298,7 +291,8 @@
       margin-top: 15px;
       padding: 15px;
       background: white;
-      border-radius: 8px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
       flex-wrap: wrap;
       gap: 15px;
     }
@@ -338,13 +332,6 @@
       border: 1.5px solid #d1d5db;
       background: #f9fafb;
       border-radius: 15px;
-    }
-
-    .input-label {
-      font-size: 14px;
-      color: #667eea;
-      font-weight: 600;
-      margin-bottom: 10px;
     }
 
     .code-input {
@@ -402,7 +389,7 @@
 
     .or-divider::after {
       background: linear-gradient(to left, transparent, #e5e7eb);
-    }
+    }  
   </style>
 </head>
 <body>
@@ -441,7 +428,7 @@
         type="text"
         id="codeInput"
         class="code-input"
-        placeholder="6-digit code"
+        placeholder="6-character code"
         maxlength="6"
         inputmode="text"
         pattern="[A-Z0-9]{6}"
@@ -473,7 +460,7 @@
   </div>
 
   <script type="module">
-    import { getDatabase, ref, set, get, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
     const firebaseConfig = {
@@ -522,7 +509,7 @@
     let bytesAtLastUpdate = 0;
     let transferCode = null;
 
-    const CHUNK_SIZE = 1048576; // 1MB chunks for maximum speed
+    const CHUNK_SIZE = 262144; // 256KB chunks
 
     const config = {
       iceServers: [
@@ -557,21 +544,9 @@
       return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
 
-    let statusTimeout;
-
-    function showStatus(message, type, autoHide = false) {
+    function showStatus(message, type) {
       status.textContent = message;
       status.className = 'status active ' + type;
-
-      // Clear any previous timer
-      if (statusTimeout) clearTimeout(statusTimeout);
-
-      // Auto-hide after 5s if requested
-      if (autoHide) {
-        statusTimeout = setTimeout(() => {
-          status.classList.remove('active');
-        }, 5000);
-      }
     }
 
     function updateConnectionStatus(connected) {
@@ -624,8 +599,7 @@
       peerConnection = new RTCPeerConnection(config);
       
       dataChannel = peerConnection.createDataChannel('fileTransfer', {
-        ordered: false,  // Unordered for speed
-        maxRetransmits: 0  // No retransmits for maximum speed
+        ordered: true
       });
       dataChannel.binaryType = 'arraybuffer';
 
@@ -654,7 +628,7 @@
             timestamp: Date.now()
           });
           
-          showStatus('✓ Code ready! Share with receiver.', 'success', true);
+          showStatus('✓ Code ready! Share with receiver.', 'success');
           statusText.textContent = 'Waiting for receiver...';
         }
       };
@@ -697,49 +671,28 @@
       lastUpdate = startTime;
       bytesAtLastUpdate = 0;
 
-      const totalChunks = Math.ceil(selectedFile.size / CHUNK_SIZE);
-      const chunks = [];
+      const chunkCount = Math.ceil(selectedFile.size / CHUNK_SIZE);
       
-      // Pre-read all chunks for faster sending
-      for (let i = 0; i < totalChunks; i++) {
+      for (let i = 0; i < chunkCount; i++) {
         const start = i * CHUNK_SIZE;
         const end = Math.min(start + CHUNK_SIZE, selectedFile.size);
         const chunk = selectedFile.slice(start, end);
-        chunks.push({
-          index: i,
-          data: await chunk.arrayBuffer()
-        });
+        
+        const arrayBuffer = await chunk.arrayBuffer();
+        
+        while (dataChannel.bufferedAmount > CHUNK_SIZE * 4) {
+          await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        
+        dataChannel.send(arrayBuffer);
+        updateProgress(end, selectedFile.size);
       }
 
-      // Send chunks rapidly
-      let currentChunk = 0;
-      const sendNextBatch = () => {
-        while (currentChunk < totalChunks && dataChannel.bufferedAmount < CHUNK_SIZE * 8) {
-          const chunk = chunks[currentChunk];
-          
-          // Send index first, then data (for unordered channel)
-          dataChannel.send(new Uint32Array([chunk.index]).buffer);
-          dataChannel.send(chunk.data);
-          
-          currentChunk++;
-          const progress = Math.min(currentChunk * CHUNK_SIZE, selectedFile.size);
-          updateProgress(progress, selectedFile.size);
-        }
-
-        if (currentChunk < totalChunks) {
-          setTimeout(sendNextBatch, 1);
-        } else {
-          // Send completion signal
-          dataChannel.send(new Uint32Array([0xFFFFFFFF]).buffer);
-          showStatus('✓ Transfer complete!', 'success');
-          statusText.textContent = '✓ File sent successfully!';
-          
-          // Cleanup Firebase
-          remove(ref(db, `offers/${transferCode}`));
-        }
-      };
-
-      sendNextBatch();
+      showStatus('✓ Transfer complete!', 'success');
+      statusText.textContent = '✓ File sent successfully!';
+      
+      // Cleanup Firebase
+      await remove(ref(db, `offers/${transferCode}`));
     }
 
     // RECEIVER
@@ -774,61 +727,15 @@
         dataChannel = event.channel;
         dataChannel.binaryType = 'arraybuffer';
 
-        const chunkMap = new Map();
-        const totalChunks = Math.ceil(totalSize / CHUNK_SIZE);
-        let receivedChunkCount = 0;
-        let expectingIndex = true;
-        let currentIndex = null;
-
         dataChannel.onmessage = (e) => {
-          if (expectingIndex) {
-            // Receiving chunk index
-            const indexArray = new Uint32Array(e.data);
-            currentIndex = indexArray[0];
-            
-            if (currentIndex === 0xFFFFFFFF) {
-              // Completion signal received
-              assembleFile();
-              return;
-            }
-            
-            expectingIndex = false;
-          } else {
-            // Receiving chunk data
-            chunkMap.set(currentIndex, e.data);
-            receivedChunkCount++;
-            
-            const receivedBytes = receivedChunkCount * CHUNK_SIZE;
-            updateProgress(Math.min(receivedBytes, totalSize), totalSize);
-            
-            expectingIndex = true;
+          receivedChunks.push(e.data);
+          receivedSize += e.data.byteLength;
+          updateProgress(receivedSize, totalSize);
+
+          if (receivedSize >= totalSize) {
+            saveReceivedFile();
           }
         };
-
-        function assembleFile() {
-          // Reassemble chunks in order
-          const orderedChunks = [];
-          for (let i = 0; i < totalChunks; i++) {
-            if (chunkMap.has(i)) {
-              orderedChunks.push(chunkMap.get(i));
-            }
-          }
-          
-          const blob = new Blob(orderedChunks, { type: fileMetadata.type });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = fileMetadata.name;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-
-          showStatus('✓ Download complete!', 'success');
-          statusText.textContent = '✓ File received successfully!';
-          progressFill.style.width = '100%';
-          progressPercent.textContent = '100%';
-        }
 
         dataChannel.onopen = () => {
           updateConnectionStatus(true);
