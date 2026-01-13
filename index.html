@@ -350,14 +350,20 @@
     .code-input {
       width: 100%;
       padding: 10px;
-      font-size: 24px;
+      font-size: clamp(18px, 5vw, 24px); /* scales between 18px and 24px */
       text-align: center;
       border: 1.5px solid #d1d5db;
       border-radius: 10px;
       font-family: 'Courier New', monospace;
-      letter-spacing: 6px;
+      letter-spacing: clamp(2px, 1vw, 6px); /* scales spacing with screen width */
       text-transform: uppercase;
       outline: none;
+      box-sizing: border-box;
+
+      /* Prevent placeholder wrapping/cutting */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .code-input:focus {
@@ -435,7 +441,7 @@
         type="text"
         id="codeInput"
         class="code-input"
-        placeholder="Enter 6-digit code"
+        placeholder="6-digit code"
         maxlength="6"
         inputmode="text"
         pattern="[A-Z0-9]{6}"
@@ -946,4 +952,3 @@
   </script>
 </body>
 </html>
-
