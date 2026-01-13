@@ -841,16 +841,20 @@
     });
 
     codeInput.addEventListener('input', (e) => {
-      e.target.value = e.target.value.toUpperCase();
+      e.target.value = e.target.value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '')   // optional: restrict charset
+        .slice(0, 6);                // HARD limit
     });
-
+    
     codeInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && codeInput.value.length === 6) {
         connectBtn.click();
       }
-    });;
+    });
   </script>
 </body>
 </html>
+
 
 
