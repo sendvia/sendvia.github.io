@@ -430,9 +430,6 @@
         class="code-input"
         placeholder="6-character code"
         maxlength="6"
-        inputmode="text"
-        pattern="[A-Z0-9]{6}"
-        autocomplete="one-time-code"
       />
       <button class="btn" id="connectBtn">Download File</button>
     </div>
@@ -839,23 +836,15 @@
     });
 
     codeInput.addEventListener('input', (e) => {
-      const value = e.target.value
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, '')
-        .slice(0, 6);
-
-      e.target.value = value;
-
-      if (value.length === 6) {
-        connectBtn.click();
-      }
+      e.target.value = e.target.value.toUpperCase();
     });
 
-    codeInput.addEventListener('keydown', (e) => {
+    codeInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && codeInput.value.length === 6) {
         connectBtn.click();
       }
-    });
+    });;
   </script>
 </body>
 </html>
+
