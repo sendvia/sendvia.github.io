@@ -470,7 +470,7 @@ codeInput.addEventListener('keypress', (e) => {
     connectBtn.click();
     }
 });
-const VERSION = "v1.1.1";
+const VERSION = "v1.1.3";
 const REPO_OWNER = "sendvia";
 const REPO_NAME = "sendvia.github.io";
 const BRANCH = "main";

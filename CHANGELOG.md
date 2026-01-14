@@ -1,3 +1,6 @@
+## v1.1.3
+- Seperated CSS and JS into separate files
+
 ## v1.1.2
 - Color changes
 - Minor Ui Fixes
