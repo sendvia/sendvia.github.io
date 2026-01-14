@@ -24,7 +24,7 @@
       <div class="drop-zone-hint">A one-time code will be generated</div>
     </div>
 
-    <input type="file" id="fileInput" class="file-input">
+    <input type="file" id="fileInput" class="file-input" multiple>
     
     <div class="file-info" id="fileInfo">
       <div class="file-name" id="fileName"></div>
@@ -109,6 +109,32 @@
     <div class="meta-footer">
       <span id="versionText">Loading...</span>
       <button id="changelogBtn" class="changelog-btn">CHANGELOG</button>
+      <button id="helpBtn" class="changelog-btn">HELP</button>
+    </div>
+    
+    <div id="helpModal" class="changelog-modal">
+      <div class="changelog-content">
+        <div class="changelog-header">
+          <span>Help</span>
+          <button id="helpClose" aria-label="Close help">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="changelog-body">
+          <h2>How to Use Sendvia</h2>
+          <ol>
+            <li>Drag and drop your file into the drop zone.</li>
+            <li>Copy the generated code or scan the QR code.</li>
+            <li>Share it with the receiver.</li>
+            <li>Receiver enters the code or scans QR to download.</li>
+          </ol>
+          <img src="https://via.placeholder.com/400x200.png?text=Example+Screenshot" alt="Example screenshot" style="width:100%; border-radius:8px;">
+          <p>If you encounter issues, contact support at <a href="mailto:support@sendvia.com">support@sendvia.com</a>.</p>
+        </div>
+      </div>
     </div>
 
     <!-- Changelog Modal -->
