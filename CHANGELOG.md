@@ -1,5 +1,5 @@
 ## v1.1.4
-- Minor UI changes
+- Minor UI spacing
 
 ## v1.1.3
 - Seperated CSS and JS into separate files

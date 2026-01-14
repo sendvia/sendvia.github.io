@@ -494,7 +494,7 @@
     .changelog-body h2 {
       font-size: 20px;
       font-weight: 700;
-      margin: 32px 0 5px;
+      margin: 10px 0 5px;
       color: #111827;
       padding-top: 20px;
       border-top: 1px solid #e5e7eb;
@@ -512,7 +512,7 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      padding: 6px 5px;
+      padding: 5px 10px;
       border-radius: 999px;
       margin: 12px 0 8px;
       background: #e8f5e9;
