@@ -2,6 +2,8 @@
 ### Added
 - Live GitHub changelog
 - Version footer
+- QR Code
+- Show/Hide QR (For Mobile users)
 
 ## v1.0.1
 - Minor UI spacing
