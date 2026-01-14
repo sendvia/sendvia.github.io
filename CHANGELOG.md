@@ -1,3 +1,7 @@
+## v1.1.2
+- Color changes
+- Minor Ui Fixes
+
 ## v1.1.1
 ### Added
 - Live GitHub changelog
