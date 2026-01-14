@@ -523,7 +523,7 @@ codeInput.addEventListener('keypress', (e) => {
     }
 });
 
-const VERSION = "v1.1.1";
+const VERSION = "v1.2.0";
 const REPO_OWNER = "sendvia";
 const REPO_NAME = "sendvia.github.io";
 const BRANCH = "main";
@@ -650,4 +650,5 @@ helpModal.addEventListener("click", (e) => {
     if (e.target === helpModal) {
         helpModal.classList.remove("active");
     }
+
 });
