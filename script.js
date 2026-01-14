@@ -287,7 +287,7 @@ async function sendFiles() {
             const chunk = file.slice(start, end);
             const arrayBuffer = await chunk.arrayBuffer();
 
-            while (dataChannel.bufferedAmount > CHUNK_SIZE * 4) await new Promise(r => setTimeout(r, 10));
+            while (dataChannel.bufferedAmount > 4 * 1024 * 1024) await new Promise(r => setTimeout(r, 10));
             dataChannel.send(arrayBuffer);
             sentBytes += (end - start);
             updateProgress(sentBytes, totalBytes);
