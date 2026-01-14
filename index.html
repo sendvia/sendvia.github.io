@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <link rel="icon" href="logo-black.png" type="image/png" sizes="64x64" media="(prefers-color-scheme: light)">
   <link rel="icon" href="logo-white.png" type="image/png" sizes="64x64" media="(prefers-color-scheme: dark)">
   <style>
@@ -30,7 +31,7 @@
 
     body {
       font-family: Inter, system-ui, sans-serif;
-      background: radial-gradient(circle at top, #1a1a1a, #0a0a0a 70%);
+      background: rgb(40, 40, 40);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -146,7 +147,7 @@
     }
 
     .share-code {
-      background:white;
+      background: white;
       border: 1.5px solid #d1d5db;
       border-radius: 10px;
       padding: 10px;
@@ -175,7 +176,7 @@
     }
 
     .btn {
-      background: rgb(61, 61, 61);
+      background: rgb(50, 50, 50);
       color: white;
       border: none;
       border-radius: 10px;
@@ -316,13 +317,15 @@
       text-transform: uppercase;
     }
     
+    /* Add to your existing .stats media query */
     @media (max-width: 600px) {
-      .stat-value {
-        font-size: 16px;
+      .stats {
+        gap: 10px;
+        padding: 12px;
       }
       
-      .stat-label {
-        font-size: 10px;
+      .stat {
+        min-width: 70px;  /* Reduce from 80px */
       }
     }
 
@@ -336,18 +339,16 @@
 
     .code-input {
       width: 100%;
-      padding: 10px;
-      font-size: clamp(18px, 5vw, 24px); /* scales between 18px and 24px */
+      padding: 12px;
+      font-size: 20px;
       text-align: center;
       border: 1.5px solid #d1d5db;
       border-radius: 10px;
       font-family: 'Courier New', monospace;
-      letter-spacing: clamp(2px, 1vw, 6px); /* scales spacing with screen width */
+      letter-spacing: 4px;
       text-transform: uppercase;
       outline: none;
       box-sizing: border-box;
-
-      /* Prevent placeholder wrapping/cutting */
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -357,11 +358,10 @@
       border-color: black;
     }
     
-    @media (max-width: 600px) {
+    @media (min-width: 601px) {
       .code-input {
-        font-size: 20px;
-        letter-spacing: 4px;
-        padding: 12px;
+        font-size: 24px;
+        letter-spacing: 6px;
       }
     }
 
@@ -380,16 +380,297 @@
       content: "";
       flex: 1;
       height: 1px;
-      background: #e5e7eb;
-    }
-    .or-divider::before,
-    .or-divider::after {
       background: linear-gradient(to right, transparent, #e5e7eb);
     }
 
     .or-divider::after {
       background: linear-gradient(to left, transparent, #e5e7eb);
-    }  
+    }
+
+    .meta-footer {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .changelog-btn {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .changelog-btn:hover {
+      text-decoration: underline;
+      color: #333;
+    }
+
+    .changelog-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .changelog-modal.active {
+      display: flex;
+    }
+
+    .changelog-content {
+      background: white;
+      width: min(650px, 100%);
+      max-height: 80vh;
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .changelog-header {
+      padding: 20px 24px;
+      font-weight: 700;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+    }
+
+    .changelog-header button {
+      background: #f3f4f6;
+      border: none;
+      border-radius: 10px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .changelog-header button:active {
+      transform: scale(0.96);
+    }
+
+    .changelog-header button:hover {
+      background: #e5e7eb;
+    }
+
+    .changelog-body {
+      background: #fafafa;
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .changelog-body ul {
+      margin: 12px 0 20px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .changelog-body li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 10px;
+      color: #374151;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .changelog-body li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #9ca3af;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .changelog-body h1 {
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: #111827;
+    }
+
+    .changelog-body h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 32px 0 12px;
+      color: #111827;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .changelog-body h2:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .changelog-body h3 {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin: 12px 0 8px;
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .qr-section {
+      margin-top: 15px;
+      padding: 20px;
+      background: white;
+      border: 1.5px solid #d1d5db;
+      border-radius: 15px;
+      text-align: center;
+      display: none;
+    }
+
+    .qr-section.active {
+      display: block;
+    }
+
+    .qr-code-container {
+      display: inline-block;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    .qr-label {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .qr-dependent {
+      display: none;
+    }
+
+    .qr-dependent.show-qr {
+      display: block;
+    }
+
+
+
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .share-btn {
+      flex: 1;
+      background: white;
+      color: #333;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .share-btn:hover {
+      background: #f9fafb;
+      border-color: #333;
+    }
+
+    .share-btn:active {
+      transform: scale(0.98);
+    }
+
+    .share-divider {
+      color: #999;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 600px) {
+      .share-buttons {
+        flex-direction: column;
+      }
+      
+      .share-divider {
+        padding: 8px 0;
+      }
+    }
+    /* ---------- Mobile Changelog Improvements ---------- */
+@media (max-width: 640px) {
+  .changelog-modal {
+    align-items: center; /* bottom sheet style */
+    padding: 0;
+  }
+
+  .changelog-content {
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 18px;
+  }
+
+  .changelog-header {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+
+  .changelog-header button {
+    width: 30px;
+    height: 30px;
+  }
+
+  .changelog-body {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .changelog-body h1 {
+    font-size: 18px;
+  }
+
+  .changelog-body h2 {
+    font-size: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+
+  .changelog-body li {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .changelog-body h3 {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -405,7 +686,7 @@
     </div>
 
     <input type="file" id="fileInput" class="file-input">
-
+    
     <div class="file-info" id="fileInfo">
       <div class="file-name" id="fileName"></div>
       <div class="file-size" id="fileSize"></div>
@@ -414,14 +695,40 @@
       <div class="code-label">Share this code with the receiver</div>
       
       <button class="btn" id="copyBtn">Copy Code</button>
-
+      
       <div class="peer-info" id="peerInfo">
         <span class="connection-status" id="connectionStatus"></span>
         <span id="statusText">Waiting for device to connect...</span>
       </div>
     </div>
-
     <div class="or-divider" id="orDivider">OR</div>
+    <!-- QR Code Section -->
+    <div class="qr-section" id="qrSection">
+      <button class="share-btn" id="toggleQrBtn">Show QR</button>
+      <div class="qr-dependent">
+        <div class="qr-label">Scan to receive file</div>
+        <div class="qr-code-container" id="qrCodeContainer"></div>
+        <div class="share-buttons">
+          <button class="share-btn" id="shareCodeBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            Share Code
+          </button>
+          <button class="share-btn" id="copyLinkBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div class="input-section" id="inputSection">
       <input
@@ -459,6 +766,41 @@
         <div class="stat-label">Time Left</div>
       </div>
     </div>
+
+    <div class="meta-footer">
+      <span id="versionText">Loading...</span>
+      <button id="changelogBtn" class="changelog-btn">CHANGELOG</button>
+    </div>
+
+    <!-- Changelog Modal -->
+    <div id="changelogModal" class="changelog-modal">
+      <div class="changelog-content">
+        <div class="changelog-header">
+          <span>Changelog</span>
+          <button id="closeChangelog" aria-label="Close changelog">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        </div>
+        <div id="changelogBody" class="changelog-body">
+          Loading…
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
   <script type="module">
@@ -498,6 +840,19 @@
     const codeInput = document.getElementById('codeInput');
     const connectBtn = document.getElementById('connectBtn');
     const orDivider = document.getElementById('orDivider');
+
+    // NOW check URL parameters (after elements are declared)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCode = urlParams.get('code');
+
+    if (urlCode && urlCode.length === 6) {
+      codeInput.value = urlCode.toUpperCase();
+      setTimeout(() => {
+        connectBtn.click();
+      }, 500);
+    } else if (window.location.search) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
 
     let peerConnection = null;
     let dataChannel = null;
@@ -593,7 +948,24 @@
       fileInfo.classList.add('active');
       dropZone.style.display = 'none';
       inputSection.style.display = 'none';
-      orDivider.style.display = 'none';
+      orDivider.style.display = 'flex';
+
+      // Generate QR code
+      const qrSection = document.getElementById('qrSection');
+      const qrCodeContainer = document.getElementById('qrCodeContainer');
+      qrCodeContainer.innerHTML = ''; // Clear previous QR code
+      
+      const shareUrl = `${window.location.origin}${window.location.pathname}?code=${transferCode}`;
+      new QRCode(qrCodeContainer, {
+        text: shareUrl,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      
+      qrSection.classList.add('active');
 
       showStatus('Setting up connection...', 'info');
       statusText.textContent = 'Creating offer...';
@@ -831,6 +1203,49 @@
       });
     });
 
+// Share Code button
+    document.getElementById('shareCodeBtn').addEventListener('click', async () => {
+      const code = shareCode.textContent;
+      const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
+      
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'Sendvia File Transfer',
+            text: `Use code ${code} to download the file`,
+            url: shareUrl
+          });
+        } catch (err) {
+          console.log('Share cancelled');
+        }
+      } else {
+        // Fallback: copy code
+        navigator.clipboard.writeText(code).then(() => {
+          const btn = document.getElementById('shareCodeBtn');
+          const originalHTML = btn.innerHTML;
+          btn.innerHTML = '✓ Copied!';
+          setTimeout(() => {
+            btn.innerHTML = originalHTML;
+          }, 2000);
+        });
+      }
+    });
+
+    // Copy Link button
+    document.getElementById('copyLinkBtn').addEventListener('click', () => {
+      const code = shareCode.textContent;
+      const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
+      
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        const btn = document.getElementById('copyLinkBtn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '✓ Link Copied!';
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+        }, 2000);
+      });
+    });
+
     connectBtn.addEventListener('click', () => {
       const code = codeInput.value.toUpperCase().trim();
       if (code.length === 6) {
@@ -841,10 +1256,19 @@
     });
 
     codeInput.addEventListener('input', (e) => {
-      e.target.value = e.target.value
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, '')   // optional: restrict charset
-        .slice(0, 6);                // HARD limit
+      const code = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+      e.target.value = code;
+      
+      // Update URL bar to show the code
+      if (code.length === 6) {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set('code', code);
+        window.history.replaceState({}, '', newUrl);
+      } else if (code.length === 0) {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.delete('code');
+        window.history.replaceState({}, '', newUrl);
+      }
     });
     
     codeInput.addEventListener('keypress', (e) => {
@@ -852,9 +1276,119 @@
         connectBtn.click();
       }
     });
+    const VERSION = "v1.1.1";
+    const REPO_OWNER = "sendvia";
+    const REPO_NAME = "sendvia.github.io";
+    const BRANCH = "main";
+    const versionTextEl = document.getElementById("versionText");
+
+    async function fetchLatestCommitHash() {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits/${BRANCH}`);
+        if (!res.ok) throw new Error("GitHub API request failed");
+        const data = await res.json();
+        const hash = data.sha.slice(0, 7);
+        versionTextEl.textContent = `${VERSION} • build ${hash}`;
+      } catch (err) {
+        console.warn("Could not fetch git hash:", err);
+        versionTextEl.textContent = `${VERSION} • build unknown`;
+      }
+    }
+
+    fetchLatestCommitHash();
+
+
+    // CHANGE THIS to your repo
+    const CHANGELOG_URL = "https://raw.githubusercontent.com/sendvia/sendvia.github.io/main/CHANGELOG.md";
+    const res = await fetch(`${CHANGELOG_URL}?t=${Date.now()}`);
+
+    const changelogBtn = document.getElementById("changelogBtn");
+    const changelogModal = document.getElementById("changelogModal");
+    const changelogBody = document.getElementById("changelogBody");
+    const closeChangelog = document.getElementById("closeChangelog");
+
+    // Replace the changelog button click handler with this:
+    changelogBtn.addEventListener("click", async () => {
+    changelogModal.classList.add("active");
+
+    if (changelogBody.dataset.loaded) return;
+
+    try {
+      const res = await fetch(`${CHANGELOG_URL}?t=${Date.now()}`);
+      if (!res.ok) throw new Error("Fetch failed");
+      const text = await res.text();
+
+        // Improved markdown parser
+        let html = text
+          .split('\n')
+          .map(line => {
+            // Headers
+            if (line.startsWith('### ')) {
+              return `<h3>${line.slice(4)}</h3>`;
+            }
+            if (line.startsWith('## ')) {
+              return `<h2>${line.slice(3)}</h2>`;
+            }
+            if (line.startsWith('# ')) {
+              return `<h1>${line.slice(2)}</h1>`;
+            }
+            // List items
+            if (line.startsWith('- ')) {
+              return `<li>${line.slice(2)}</li>`;
+            }
+            // Empty lines
+            if (line.trim() === '') {
+              return '<br>';
+            }
+            return line;
+          })
+          .join('\n');
+
+        // Wrap consecutive <li> in <ul>
+        html = html.replace(/(<li>.*?<\/li>\n?)+/gs, match => {
+          return '<ul>' + match + '</ul>';
+        });
+
+        changelogBody.innerHTML = html;
+        changelogBody.dataset.loaded = "true";
+      } catch {
+        changelogBody.textContent = "Failed to load changelog.";
+      }
+    });
+
+    closeChangelog.addEventListener("click", () => {
+      changelogModal.classList.remove("active");
+    });
+
+    changelogModal.addEventListener("click", (e) => {
+      if (e.target === changelogModal) {
+        changelogModal.classList.remove("active");
+      }
+    });
+
+    // Add cleanup on page unload - place AFTER all event listeners
+    window.addEventListener('beforeunload', async () => {
+      if (transferCode) {
+        try {
+          await remove(ref(db, `offers/${transferCode}`));
+          await remove(ref(db, `answers/${transferCode}`));
+        } catch (e) {
+          console.error('Cleanup failed:', e);
+        }
+      }
+      
+      if (peerConnection) {
+        peerConnection.close();
+      }
+    });
+
+    const toggleQrBtn = document.getElementById('toggleQrBtn');
+    const qrDependent = document.querySelector('.qr-dependent');
+
+    toggleQrBtn.addEventListener('click', () => {
+      const isVisible = qrDependent.classList.toggle('show-qr');
+      toggleQrBtn.textContent = isVisible ? 'Hide QR' : 'Show QR';
+    });
   </script>
 </body>
 </html>
-
-
-
