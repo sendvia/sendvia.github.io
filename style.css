@@ -456,13 +456,13 @@
 
     .changelog-body {
       background: #fafafa;
-      padding: 24px;
+      padding: 25px;
       overflow-y: auto;
       flex: 1;
     }
 
     .changelog-body ul {
-      margin: 12px 0 20px 0;
+      margin: 10px 0 0px 0;
       padding-left: 0;
       list-style: none;
     }
@@ -470,7 +470,7 @@
     .changelog-body li {
       position: relative;
       padding-left: 24px;
-      margin-bottom: 10px;
+      margin-bottom: 0px;
       color: #374151;
       font-size: 15px;
       line-height: 1.5;
@@ -494,7 +494,7 @@
     .changelog-body h2 {
       font-size: 20px;
       font-weight: 700;
-      margin: 32px 0 12px;
+      margin: 32px 0 5px;
       color: #111827;
       padding-top: 20px;
       border-top: 1px solid #e5e7eb;
@@ -512,7 +512,7 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      padding: 6px 10px;
+      padding: 6px 5px;
       border-radius: 999px;
       margin: 12px 0 8px;
       background: #e8f5e9;
