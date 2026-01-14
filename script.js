@@ -523,28 +523,49 @@ codeInput.addEventListener('keypress', (e) => {
     }
 });
 
-const VERSION = "v1.2.0";
+const VERSION_ELEMENT = document.getElementById("versionText");
+const CHANGELOG_URL = "https://raw.githubusercontent.com/sendvia/sendvia.github.io/main/CHANGELOG.md";
 const REPO_OWNER = "sendvia";
 const REPO_NAME = "sendvia.github.io";
 const BRANCH = "main";
-const versionTextEl = document.getElementById("versionText");
+
+async function fetchVersionFromChangelog() {
+    try {
+        const res = await fetch(`${CHANGELOG_URL}?t=${Date.now()}`);
+        if (!res.ok) throw new Error("Failed to fetch changelog");
+        const text = await res.text();
+
+        // Match first line starting with "## v1.2.0"
+        const match = text.match(/^##\s+v?([0-9]+\.[0-9]+\.[0-9]+)/m);
+        if (match) return match[1]; // just "1.2.0"
+        return "unknown";
+    } catch (err) {
+        console.warn("Could not fetch version from changelog:", err);
+        return "unknown";
+    }
+}
 
 async function fetchLatestCommitHash() {
     try {
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits/${BRANCH}`);
-        if (!res.ok) throw new Error("GitHub API request failed");
         const data = await res.json();
-        const hash = data.sha.slice(0, 7);
-        versionTextEl.textContent = `${VERSION} • build ${hash}`;
-    } catch (err) {
-        console.warn("Could not fetch git hash:", err);
-        versionTextEl.textContent = `${VERSION} • build unknown`;
+        return data.sha?.slice(0, 7) || "unknown";
+    } catch {
+        return "unknown";
     }
 }
 
-fetchLatestCommitHash();
+async function updateVersionText() {
+    const versionNumber = await fetchVersionFromChangelog();
+    const hash = await fetchLatestCommitHash();
 
-const CHANGELOG_URL = "https://raw.githubusercontent.com/sendvia/sendvia.github.io/main/CHANGELOG.md";
+    VERSION_ELEMENT.textContent = `v${versionNumber} • build ${hash}`;
+}
+
+// Run it
+updateVersionText();
+
+
 
 const changelogBtn = document.getElementById("changelogBtn");
 const changelogModal = document.getElementById("changelogModal");
@@ -650,5 +671,4 @@ helpModal.addEventListener("click", (e) => {
     if (e.target === helpModal) {
         helpModal.classList.remove("active");
     }
-
 });
