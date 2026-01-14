@@ -1,22 +1,32 @@
-## v1.1.4
-- Minor UI spacing
+## v1.2.0
+### Added
+- Multi-file transfers: send multiple files in one session
+- Help button (currently inactive, will be enabled in a future update)
 
 ## v1.1.3
-- Seperated CSS and JS into separate files
+### Changed
+- Minor UI spacing adjustments
 
 ## v1.1.2
-- Color changes
-- Minor Ui Fixes
+### Changed
+- Separated CSS and JavaScript into separate files
 
 ## v1.1.1
+### Changed
+- Color updates
+- Minor UI fixes
+
+## v1.1.0
 ### Added
 - Live GitHub changelog
 - Version footer
-- QR Code
-- Show/Hide QR (For Mobile users)
+- QR code support
+- Show/Hide QR option for mobile users
 
 ## v1.0.1
-- Minor UI spacing
+### Changed
+- Minor UI spacing adjustments
 
 ## v1.0.0
+### Added
 - Initial release
