@@ -40,14 +40,17 @@ const qrSection = document.getElementById('qrSection');
 const qrCodeContainer = document.getElementById('qrCodeContainer');
 
 // ------------------- URL Code Handling -------------------
+const navType = performance.getEntriesByType("navigation")[0]?.type;
 const urlParams = new URLSearchParams(window.location.search);
 const urlCode = urlParams.get('code');
-if (urlCode && urlCode.length === 6) {
+
+if (navType === "reload" && window.location.search) {
+    window.history.replaceState({}, '', window.location.pathname);
+} else if (urlCode && urlCode.length === 6) {
     codeInput.value = urlCode.toUpperCase();
     setTimeout(() => connectBtn.click(), 500);
-} else if (window.location.search) {
-    window.history.replaceState({}, '', window.location.pathname);
 }
+
 
 let selectedFile = null;
 let fileMetadata = null;
@@ -287,7 +290,7 @@ async function sendFiles() {
             const chunk = file.slice(start, end);
             const arrayBuffer = await chunk.arrayBuffer();
 
-            while (dataChannel.bufferedAmount > 4 * 1024 * 1024) await new Promise(r => setTimeout(r, 10));
+            while (dataChannel.bufferedAmount > CHUNK_SIZE * 4) await new Promise(r => setTimeout(r, 10));
             dataChannel.send(arrayBuffer);
             sentBytes += (end - start);
             updateProgress(sentBytes, totalBytes);
@@ -659,8 +662,7 @@ const helpModal = document.getElementById("helpModal");
 const helpClose = document.getElementById("helpClose");
 
 helpBtn.addEventListener("click", () => {
-    // helpModal.classList.add("active");
-    alert("Under Construction")
+    helpModal.classList.add("active");
 });
 
 helpClose.addEventListener("click", () => {

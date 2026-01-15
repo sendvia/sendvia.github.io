@@ -1,7 +1,11 @@
+## v1.3.0
+### Added
+- Fully functional Help button with guides and images
+
 ## v1.2.0
 ### Added
 - Multi-file transfers: send multiple files in one session
-- Help button (currently inactive, will be enabled in a future update)
+- Help button (initially inactive)
 
 ## v1.1.3
 ### Changed
