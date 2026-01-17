@@ -357,11 +357,13 @@ async function createAnswer(code) {
 
     peerConnection = new RTCPeerConnection(config);
 
+   // RECEIVER: show progress while receiving
     peerConnection.ondatachannel = event => {
         dataChannel = event.channel;
         dataChannel.binaryType = 'arraybuffer';
 
         dataChannel.onmessage = e => {
+            // File info arrives first as a JSON string
             if (typeof e.data === 'string') {
                 currentReceivedFile = JSON.parse(e.data);
                 totalSize = currentReceivedFile.size;
@@ -371,21 +373,43 @@ async function createAnswer(code) {
                 lastUpdate = Date.now();
                 bytesAtLastUpdate = 0;
 
+                // Show progress UI for receiver
+                stats.style.display = 'flex';
+                progressBar.classList.add('active');
+                progressFill.style.width = '0%';
+                progressPercent.textContent = '0%';
+                transferSpeed.textContent = '—';
+                timeRemaining.textContent = '--:--';
+
                 statusText.textContent = `Receiving: ${currentReceivedFile.name}`;
                 return;
             }
 
+            // Receiving actual file chunks
             receivedChunks.push(e.data);
             receivedSize += e.data.byteLength;
             updateProgress(receivedSize, totalSize);
 
+            // File fully received
             if (receivedSize >= totalSize) {
                 saveReceivedFile(currentReceivedFile, receivedChunks);
                 receivedFiles.push(currentReceivedFile);
+
+                // Reset variables
                 receivedChunks = [];
                 currentReceivedFile = null;
                 receivedSize = 0;
                 totalSize = 0;
+
+                // Hide progress UI after completion
+                stats.style.display = 'none';
+                progressBar.classList.remove('active');
+                progressFill.style.width = '0%';
+                progressPercent.textContent = '';
+                transferSpeed.textContent = '';
+                timeRemaining.textContent = '';
+
+                statusText.textContent = 'File received!';
             }
         };
 
@@ -394,6 +418,7 @@ async function createAnswer(code) {
             showStatus('✓ Connected! Receiving file...', 'success');
         };
     };
+
 
     // Collect ICE candidates
     const iceCandidates = [];
@@ -575,6 +600,13 @@ const changelogModal = document.getElementById("changelogModal");
 const changelogBody = document.getElementById("changelogBody");
 const closeChangelog = document.getElementById("closeChangelog");
 
+const HEADER_CLASS_MAP = {
+    added: "changelog-body-added",
+    changed: "changelog-body-changed",
+    removed: "changelog-body-removed",
+    fixed: "changelog-body-fixed"
+};
+
 changelogBtn.addEventListener("click", async () => {
     changelogModal.classList.add("active");
 
@@ -585,13 +617,18 @@ changelogBtn.addEventListener("click", async () => {
         if (!res.ok) throw new Error("Fetch failed");
         const text = await res.text();
 
-        // Improved markdown parser
+        // Markdown parser
         let html = text
             .split('\n')
             .map(line => {
                 // Headers
                 if (line.startsWith('### ')) {
-                    return `<h3>${line.slice(4)}</h3>`;
+                    const headerText = line.slice(4).trim();
+                    const headerClass = HEADER_CLASS_MAP[headerText.toLowerCase()];
+                    if (headerClass) {
+                        return `<h3 class="${headerClass}">${headerText}</h3>`;
+                    }
+                    return `<h3>${headerText}</h3>`;
                 }
                 if (line.startsWith('## ')) {
                     return `<h2>${line.slice(3)}</h2>`;
@@ -599,22 +636,23 @@ changelogBtn.addEventListener("click", async () => {
                 if (line.startsWith('# ')) {
                     return `<h1>${line.slice(2)}</h1>`;
                 }
+
                 // List items
                 if (line.startsWith('- ')) {
                     return `<li>${line.slice(2)}</li>`;
                 }
+
                 // Empty lines
                 if (line.trim() === '') {
                     return '<br>';
                 }
+
                 return line;
             })
             .join('\n');
 
         // Wrap consecutive <li> in <ul>
-        html = html.replace(/(<li>.*?<\/li>\n?)+/gs, match => {
-            return '<ul>' + match + '</ul>';
-        });
+        html = html.replace(/(<li>.*?<\/li>\n?)+/gs, match => `<ul>${match}</ul>`);
 
         changelogBody.innerHTML = html;
         changelogBody.dataset.loaded = "true";
@@ -622,6 +660,7 @@ changelogBtn.addEventListener("click", async () => {
         changelogBody.textContent = "Failed to load changelog.";
     }
 });
+
 
 closeChangelog.addEventListener("click", () => {
     changelogModal.classList.remove("active");

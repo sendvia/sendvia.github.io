@@ -1,3 +1,14 @@
+## v1.4.0
+### Added
+- Receiver Progress Bar: The transferring progress bar now appears on the receiver’s side, showing live progress, speed, and remaining time.
+
+### Changed
+- Adjusted spacing and layout of the Help Section UI for a cleaner, more intuitive design.
+
+### Removed
+- Redundant pill text in the Help Section.
+- Deprecated old UI buttons.
+
 ## v1.3.0
 ### Added
 - Fully functional Help button with guides and images
