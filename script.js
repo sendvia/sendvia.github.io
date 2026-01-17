@@ -713,3 +713,25 @@ helpModal.addEventListener("click", (e) => {
         helpModal.classList.remove("active");
     }
 });
+
+const aboutBtn = document.getElementById("aboutBtn");
+const aboutModal = document.getElementById("aboutModal");
+const aboutClose = document.getElementById("aboutClose");
+
+aboutBtn.addEventListener("click", () => {
+    aboutModal.classList.add("active");
+});
+
+aboutClose.addEventListener("click", () => {
+    aboutModal.classList.remove("active");
+});
+
+aboutModal.addEventListener("click", (e) => {
+    if (e.target === aboutModal) {
+        aboutModal.classList.remove("active");
+    }
+});
+
+document.getElementById('privacyBtn').addEventListener('click', () => {
+  window.open('Privacy&Terms/privacy.html', '_blank', 'noopener,noreferrer');
+});

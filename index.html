@@ -111,12 +111,105 @@
       </div>
     </div>
 
+    <!------------------------ BUTTONS ------------------------>
+
     <div class="meta-footer">
-      <span id="versionText">Fetching...</span>
-      <button id="changelogBtn" class="changelog-btn">CHANGELOG</button>
-      <button id="helpBtn" class="help-btn">HELP</button>
+      <div class="version-info">
+        <span id="versionText">Fetching...</span>
+      </div>
+      <div class="footer-buttons">
+        <button id="changelogBtn" class="changelog-btn">CHANGELOG</button>
+        <button id="helpBtn" class="help-btn">HELP</button>
+        <button id="aboutBtn" class="about-btn">ABOUT</button>
+        <button id="privacyBtn" class="privacy-btn">PRIVACY&TERMS</button>
+      </div>
     </div>
-    
+    <div class="copyright-footer">
+      © Sendvia
+    </div>
+
+    <!---------------------- ABOUT SECTION ---------------------->
+
+    <div id="aboutModal" class="about-modal">
+      <div class="about-content">
+        <div class="about-header">
+          <span>About Section</span>
+          <button id="aboutClose" aria-label="Close help">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <!-- BODY -->
+        <div class="about-body">
+          <h1>About Sendvia</h1>
+          <p>
+            Sendvia is a fast, simple, and privacy-focused file sharing tool designed
+            for direct transfers between people — no accounts, no ads, no storage.
+          </p>
+          <h3>Why did I create this?</h3>
+          <p>
+            Most file-sharing platforms are bloated, slow, or invasive.
+            Sendvia was built to be lightweight, distraction-free, and focused on
+            doing one thing well: sending files directly.
+          </p>
+          <h3>How does Sendvia work?</h3>
+          <p>
+            Files are transferred directly between the sender and receiver using
+            peer-to-peer technology (WebRTC). A temporary code is only used to
+            establish the connection.
+          </p>
+          <h3>Are my files stored on any server?</h3>
+          <p>
+            <strong>No.</strong> Files are never uploaded, stored, logged, or backed up.
+            They move directly from sender to receiver.
+          </p>
+          <ul>
+            <li>No cloud storage</li>
+            <li>No file history</li>
+            <li>No access to your data</li>
+          </ul>
+          <h3>What data is stored?</h3>
+          <p>
+            Only minimal, temporary connection data (such as a transfer code and
+            signaling information) is stored to help peers connect.
+            This data is removed automatically after use.
+          </p>
+          <h3>Is Sendvia open source?</h3>
+          <p>
+            Yes. Sendvia is open source and transparent by design.
+          </p>
+          <p>
+            <strong>GitHub:</strong>
+            <a href="https://github.com/sendvia/sendvia.github.io" target="_blank" rel="noopener noreferrer">
+              View source code
+            </a>
+          </p>
+          <h3>Is Sendvia free?</h3>
+          <p>
+            Yes. Sendvia is completely free to use with no subscriptions or limits.
+          </p>
+          <h3>Is this secure?</h3>
+          <p>
+            Transfers are encrypted end-to-end using WebRTC’s built-in security.
+            Only the sender and receiver can access the files.
+          </p>
+          <h3>Does Sendvia track users?</h3>
+          <p>
+            No analytics, no ads, no tracking, and no user profiling.
+          </p>
+          <h3>Who made this?</h3>
+          <p>
+            Sendvia is developed and maintained independently with a focus on
+            privacy, simplicity, and clean design.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!---------------------- HELP SECTION ---------------------->
+
     <div id="helpModal" class="help-modal">
       <div class="help-content">
         <div class="help-header">
@@ -180,7 +273,7 @@
       </div>
     </div>
 
-    <!-- Changelog Modal -->
+    <!------------------------ Changelog Modal ------------------------>
     <div id="changelogModal" class="changelog-modal">
       <div class="changelog-content">
         <div class="changelog-header">

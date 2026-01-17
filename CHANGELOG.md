@@ -1,15 +1,22 @@
+## v1.5.0
+### Added
+- About section describing Sendvia’s purpose and usage.
+- Privacy Policy & Terms of Service sections clarifying no data collection, storage, or cookies, and outlining acceptable use and liability limitations.
+
+### Changed
+- Updated footer layout and positioning.
+- Footer navigation updated to include About and Privacy & Terms links.
+- Refined spacing and layout in the Help Section for a cleaner, more intuitive UI.
+
 ## v1.4.0
 ### Added
-
 - Receiver-side progress bar showing real-time transfer progress, speed, and estimated remaining time.
 - Changelog section pills for clearer categorization: Added, Changed, Removed, and Fixed.
 
 ### Changed
-
 - Refined spacing and layout in the Help Section for a cleaner, more intuitive UI.
 
 ### Removed
-
 - Redundant pill text in the Help Section.
 - Deprecated and unused UI buttons.
 
@@ -20,6 +27,7 @@
 ## v1.2.0
 ### Added
 - Multi-file transfers: send multiple files in one session
+### Fixed
 - Help button (initially inactive)
 
 ## v1.1.3

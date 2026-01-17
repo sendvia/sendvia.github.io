@@ -1,0 +1,310 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: rgb(40, 40, 40);
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  background: white;
+  border-radius: 0;
+  padding: 50px;
+  box-shadow: none;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e5e7eb;
+  justify-content: center;
+}
+
+.tab {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+
+.tab:hover {
+  color: #333;
+}
+
+.tab.active {
+  color: #333;
+  border-bottom-color: #22c55e;
+}
+
+.tab-content {
+  display: none;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 40px;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  margin: 32px 0 16px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+h2:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 24px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+h3::before {
+  content: "";
+  width: 4px;
+  height: 16px;
+  background: #22c55e;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+p {
+  color: #4b5563;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+ul {
+  list-style: none;
+  margin: 16px 0 24px;
+  padding-left: 0;
+}
+
+li {
+  position: relative;
+  padding-left: 24px;
+  margin: 10px 0;
+  color: #4b5563;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+li::before {
+  content: "•";
+  position: absolute;
+  left: 6px;
+  top: 0;
+  color: #22c55e;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.highlight-box {
+  background: #f0fdf4;
+  border-left: 4px solid #22c55e;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.highlight-box p {
+  margin: 0;
+  color: #166534;
+  font-weight: 500;
+}
+
+strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.last-updated {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 13px;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 24px;
+  background: #333;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.back-link:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 0;
+  }
+
+  .container {
+    padding: 30px 20px;
+    border-radius: 0;
+  }
+
+  .header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+  }
+
+  .logo {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 19px;
+    margin: 28px 0 12px;
+    padding-top: 20px;
+  }
+
+  h3 {
+    font-size: 16px;
+    margin: 20px 0 10px;
+    gap: 6px;
+  }
+
+  h3::before {
+    width: 3px;
+    height: 14px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  ul {
+    margin: 14px 0 20px;
+  }
+
+  li {
+    font-size: 14px;
+    padding-left: 22px;
+    margin: 8px 0;
+  }
+
+  li::before {
+    font-size: 18px;
+    left: 4px;
+  }
+
+  .highlight-box {
+    padding: 16px;
+    margin: 16px 0;
+  }
+
+  .highlight-box p {
+    font-size: 14px;
+  }
+
+  .nav-tabs {
+    gap: 5px;
+    margin-bottom: 25px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab {
+    padding: 10px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .last-updated {
+    font-size: 12px;
+    margin-top: 30px;
+    padding-top: 20px;
+  }
+
+  .back-link {
+    padding: 10px 20px;
+    font-size: 13px;
+    margin-top: 20px;
+  }
+}
