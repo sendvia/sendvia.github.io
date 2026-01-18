@@ -27,7 +27,7 @@ Sendvia does **not** collect, store, or track user data.
 - No user profiling
 
 For full details, see:  
-👉 <a href="/privacy-terms">Privacy & Terms</a>
+👉 <a href="https://sendvia.github.io/privacy-terms/">Privacy & Terms</a>
 
 ---
 
