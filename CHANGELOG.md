@@ -1,3 +1,27 @@
+## v1.7.0
+### Added
+- 15-minute code expiration timer with live countdown display for senders
+- Color-coded countdown warnings (blue → yellow → red) based on time remaining
+- Automatic code validation and cleanup for expired transfers
+- Page loading animation with triple-ring spinner for slow connections
+- Smooth fade-in/out animations for all modals (Changelog, Help, About)
+- Section animations for file info, QR code, status messages, and progress bars
+- Interactive button animations with ripple effects and hover states
+- Connection status bounce animation when peers connect
+- Drop zone pulse animation during drag operations
+
+### Changed
+- Enhanced mobile responsiveness for footer layout with stacked version info
+- Improved About modal styling with better spacing and typography
+- Updated expiration countdown CSS with animations and mobile optimization
+- Privacy button now opens in new tab with proper security attributes
+
+### Fixed
+- Missing startExpirationCountdown() call in createOffer function
+- Missing checkCodeExpiration() validation in createAnswer function
+- Timer cleanup not being called in beforeunload event listener
+- Incorrect privacy page URL path in footer button
+
 ## v1.6.1
 ### Fixed
 - Improved spacing and layout in the Privacy Policy section on mobile devices.
@@ -39,7 +63,6 @@
 ## v1.2.0
 ### Added
 - Multi-file transfers: send multiple files in one session
-### Fixed
 - Help button (initially inactive)
 
 ## v1.1.3
