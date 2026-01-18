@@ -1,10 +1,14 @@
+## v1.6.1
+### Fixed
+- Improved spacing and layout in the Privacy Policy section on mobile devices.
+
 ## v1.6.0
 ### Changed
-- Moved Privacy & Terms page to a clean, folder-based URL (`/privacy-terms`) without `.html`.
+- Moved Privacy & Terms page to a clean, folder-based URL (/privacy-terms) without .html.
 - Updated internal links and buttons to use the new route.
 
 ### Added
-- Redirect from legacy `privacy.html` to the new `/privacy-terms` route.
+- Redirect from legacy privacy.html to the new /privacy-terms route.
 
 ## v1.5.0
 ### Added
