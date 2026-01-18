@@ -39,7 +39,6 @@
 ## v1.2.0
 ### Added
 - Multi-file transfers: send multiple files in one session
-### Fixed
 - Help button (initially inactive)
 
 ## v1.1.3
