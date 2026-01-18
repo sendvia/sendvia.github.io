@@ -733,5 +733,5 @@ aboutModal.addEventListener("click", (e) => {
 });
 
 document.getElementById('privacyBtn').addEventListener('click', () => {
-  window.open('Privacy&Terms/privacy.html', '_blank', 'noopener,noreferrer');
+  window.open('/privacy-terms', '_blank', 'noopener,noreferrer');
 });
