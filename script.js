@@ -1,3 +1,42 @@
+// ==================== PAGE LOADER ====================
+
+// Hide loader when page is fully loaded
+window.addEventListener('load', () => {
+    const loader = document.getElementById('pageLoader');
+    if (loader) {
+        // Add a small delay for smooth transition
+        setTimeout(() => {
+            loader.classList.add('loaded');
+            
+            // Remove from DOM after animation completes
+            setTimeout(() => {
+                loader.remove();
+            }, 500);
+        }, 300);
+    }
+});
+
+// Fallback: Hide loader after 5 seconds even if page hasn't fully loaded
+// (in case of very slow connections or errors)
+setTimeout(() => {
+    const loader = document.getElementById('pageLoader');
+    if (loader && !loader.classList.contains('loaded')) {
+        loader.classList.add('loaded');
+        setTimeout(() => {
+            loader.remove();
+        }, 500);
+    }
+}, 5000);
+
+// Optional: Show loader on page navigation (if using)
+window.addEventListener('beforeunload', () => {
+    const loader = document.getElementById('pageLoader');
+    if (loader) {
+        loader.classList.remove('loaded');
+    }
+});
+
+
 import { getDatabase, ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
@@ -76,8 +115,134 @@ const config = {
         { urls: 'stun:stun3.l.google.com:19302' }
     ]
 };
+let expirationTimer = null;
+let expirationTime = null;
+const EXPIRATION_DURATION = 15 * 60 * 1000;
 
 // ------------------- Utility Functions -------------------
+
+function formatCountdown(milliseconds) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+/**
+ * Starts the 15-minute countdown timer
+ * Creates and updates the countdown display element
+ */
+function startExpirationCountdown() {
+    expirationTime = Date.now() + EXPIRATION_DURATION;
+    
+    // Create countdown display element
+    let countdownEl = document.getElementById('expirationCountdown');
+    if (!countdownEl) {
+        countdownEl = document.createElement('div');
+        countdownEl.id = 'expirationCountdown';
+        
+        // Insert after code label
+        const codeLabel = document.querySelector('.code-label');
+        codeLabel.parentNode.insertBefore(countdownEl, codeLabel.nextSibling);
+    }
+    
+    // Update countdown every second
+    expirationTimer = setInterval(() => {
+        const remaining = expirationTime - Date.now();
+        
+        if (remaining <= 0) {
+            clearInterval(expirationTimer);
+            handleCodeExpiration();
+            return;
+        }
+        
+        const timeStr = formatCountdown(remaining);
+        
+        // Change styling based on time remaining
+        if (remaining < 2 * 60 * 1000) { // Less than 2 minutes - CRITICAL
+            countdownEl.style.background = '#ffebee';
+            countdownEl.style.borderColor = '#ef5350';
+            countdownEl.style.color = '#c62828';
+            countdownEl.innerHTML = `⚠️ Code expires in <strong>${timeStr}</strong>`;
+        } else if (remaining < 5 * 60 * 1000) { // Less than 5 minutes - WARNING
+            countdownEl.style.background = '#fff3cd';
+            countdownEl.style.borderColor = '#ffc107';
+            countdownEl.style.color = '#856404';
+            countdownEl.innerHTML = `⏱️ Code expires in <strong>${timeStr}</strong>`;
+        } else { // Normal state
+            countdownEl.style.background = '#e3f2fd';
+            countdownEl.style.borderColor = '#90caf9';
+            countdownEl.style.color = '#1976d2';
+            countdownEl.innerHTML = `⏱️ Code expires in <strong>${timeStr}</strong>`;
+        }
+    }, 1000);
+}
+
+/**
+ * Handles what happens when the code expires
+ */
+async function handleCodeExpiration() {
+    // Remove countdown element
+    const countdownEl = document.getElementById('expirationCountdown');
+    if (countdownEl) countdownEl.remove();
+    
+    // Clean up Firebase
+    if (transferCode) {
+        try {
+            await remove(ref(db, `offers/${transferCode}`));
+            await remove(ref(db, `answers/${transferCode}`));
+        } catch (e) {
+            console.error('Cleanup failed:', e);
+        }
+    }
+    
+    // Close peer connection
+    if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+    }
+    
+    if (dataChannel) {
+        dataChannel.close();
+        dataChannel = null;
+    }
+    
+    // Show expiration message
+    showStatus('❌ Transfer code expired. Please create a new transfer.', 'error');
+    statusText.textContent = 'Code expired';
+    
+    // Reset UI after 3 seconds
+    setTimeout(() => {
+        location.reload();
+    }, 3000);
+}
+
+/**
+ * Checks if a code has expired (for receivers)
+ * @param {string} code - The transfer code to check
+ * @returns {boolean} - True if valid, false if expired
+ */
+async function checkCodeExpiration(code) {
+    const offerSnapshot = await get(ref(db, `offers/${code}`));
+    if (!offerSnapshot.exists()) return false;
+    
+    const offerData = offerSnapshot.val();
+    const age = Date.now() - offerData.timestamp;
+    
+    if (age > EXPIRATION_DURATION) {
+        // Clean up expired code
+        try {
+            await remove(ref(db, `offers/${code}`));
+            await remove(ref(db, `answers/${code}`));
+        } catch (e) {
+            console.error('Cleanup failed:', e);
+        }
+        return false;
+    }
+    
+    return true;
+}
+
 function generateCode() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
@@ -188,6 +353,7 @@ function saveReceivedFile(fileMeta, chunks) {
 }
 
 // SENDER
+// SENDER - Replace your entire createOffer function with this:
 async function createOffer(files) {
     selectedFiles = Array.from(files);
     transferCode = generateCode();
@@ -199,6 +365,9 @@ async function createOffer(files) {
     selectedFile = selectedFiles[0];
     
     shareCode.textContent = transferCode;
+    
+    // START THE EXPIRATION COUNTDOWN
+    startExpirationCountdown();
     
     dropZone.style.display = 'none';
     inputSection.style.display = 'none';
@@ -305,7 +474,15 @@ async function sendFiles() {
 }
 
 // RECEIVER
+// RECEIVER - Replace your entire createAnswer function with this:
 async function createAnswer(code) {
+    // CHECK IF CODE IS EXPIRED
+    showStatus('Checking code validity...', 'info');
+    const isValid = await checkCodeExpiration(code);
+    if (!isValid) {
+        return showStatus('❌ Transfer code expired or invalid', 'error');
+    }
+    
     showStatus('Looking for transfer...', 'info');
     
     const offerSnapshot = await get(ref(db, `offers/${code}`));
@@ -674,6 +851,12 @@ changelogModal.addEventListener("click", (e) => {
 
 // Add cleanup on page unload
 window.addEventListener('beforeunload', async () => {
+    // Clear expiration timer
+    if (expirationTimer) {
+        clearInterval(expirationTimer);
+        expirationTimer = null;
+    }
+    
     if (transferCode) {
         try {
             await remove(ref(db, `offers/${transferCode}`));
