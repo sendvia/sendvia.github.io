@@ -9,11 +9,13 @@
 - Interactive button animations with ripple effects and hover states
 - Connection status bounce animation when peers connect
 - Drop zone pulse animation during drag operations
+
 ### Changed
 - Enhanced mobile responsiveness for footer layout with stacked version info
 - Improved About modal styling with better spacing and typography
 - Updated expiration countdown CSS with animations and mobile optimization
 - Privacy button now opens in new tab with proper security attributes
+
 ### Fixed
 - Missing startExpirationCountdown() call in createOffer function
 - Missing checkCodeExpiration() validation in createAnswer function
