@@ -27,7 +27,7 @@ Sendvia does **not** collect, store, or track user data.
 - No user profiling
 
 For full details, see:  
-👉 `[/privacy-terms](https://sendvia.github.io/privacy-terms/)`
+👉 `https://sendvia.github.io/privacy-terms/`
 
 ---
 
@@ -45,7 +45,6 @@ No frameworks. No backend. No unnecessary dependencies.
 ## 📂 Project Structure
 
 ```text
-/
 ├── index.html
 ├── style.css/
 ├── script.js/
