@@ -107,5 +107,4 @@
 - Minor UI spacing adjustments
 
 ## v1.0.0
-### Added
 - Initial release
