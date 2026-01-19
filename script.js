@@ -4,11 +4,8 @@
 window.addEventListener('load', () => {
     const loader = document.getElementById('pageLoader');
     if (loader) {
-        // Add a small delay for smooth transition
         setTimeout(() => {
             loader.classList.add('loaded');
-            
-            // Remove from DOM after animation completes
             setTimeout(() => {
                 loader.remove();
             }, 500);
@@ -16,8 +13,7 @@ window.addEventListener('load', () => {
     }
 });
 
-// Fallback: Hide loader after 5 seconds even if page hasn't fully loaded
-// (in case of very slow connections or errors)
+// Fallback: Hide loader after 5 seconds
 setTimeout(() => {
     const loader = document.getElementById('pageLoader');
     if (loader && !loader.classList.contains('loaded')) {
@@ -27,15 +23,6 @@ setTimeout(() => {
         }, 500);
     }
 }, 5000);
-
-// Optional: Show loader on page navigation (if using)
-window.addEventListener('beforeunload', () => {
-    const loader = document.getElementById('pageLoader');
-    if (loader) {
-        loader.classList.remove('loaded');
-    }
-});
-
 
 import { getDatabase, ref, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -90,7 +77,6 @@ if (navType === "reload" && window.location.search) {
     setTimeout(() => connectBtn.click(), 500);
 }
 
-
 let selectedFile = null;
 let fileMetadata = null;
 let currentReceivedFile = null;
@@ -121,7 +107,7 @@ const EXPIRATION_DURATION = 15 * 60 * 1000;
 
 // ------------------- Utility Functions -------------------
 
-function formatCountdownCompact(milliseconds) {
+function formatCountdown(milliseconds) {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -136,25 +122,28 @@ function formatCountdownCompact(milliseconds) {
     }
 }
 
-/**
- * Starts the 15-minute countdown timer
- * Creates and updates the countdown display element
- */
 function startExpirationCountdown() {
     expirationTime = Date.now() + EXPIRATION_DURATION;
     
-    // Create countdown display element
     let countdownEl = document.getElementById('expirationCountdown');
     if (!countdownEl) {
         countdownEl = document.createElement('div');
         countdownEl.id = 'expirationCountdown';
+        countdownEl.style.cssText = `
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        `;
         
-        // Insert after code label
         const codeLabel = document.querySelector('.code-label');
-        codeLabel.parentNode.insertBefore(countdownEl, codeLabel.nextSibling);
+        if (codeLabel) {
+            codeLabel.parentNode.insertBefore(countdownEl, codeLabel.nextSibling);
+        }
     }
     
-    // Update countdown every second
     expirationTimer = setInterval(() => {
         const remaining = expirationTime - Date.now();
         
@@ -166,18 +155,17 @@ function startExpirationCountdown() {
         
         const timeStr = formatCountdown(remaining);
         
-        // Change styling based on time remaining
-        if (remaining < 2 * 60 * 1000) { // Less than 2 minutes - CRITICAL
+        if (remaining < 2 * 60 * 1000) {
             countdownEl.style.background = '#ffebee';
             countdownEl.style.borderColor = '#ef5350';
             countdownEl.style.color = '#c62828';
             countdownEl.innerHTML = `⚠️ Code expires in <strong>${timeStr}</strong>`;
-        } else if (remaining < 5 * 60 * 1000) { // Less than 5 minutes - WARNING
+        } else if (remaining < 5 * 60 * 1000) {
             countdownEl.style.background = '#fff3cd';
             countdownEl.style.borderColor = '#ffc107';
             countdownEl.style.color = '#856404';
             countdownEl.innerHTML = `⏱️ Code expires in <strong>${timeStr}</strong>`;
-        } else { // Normal state
+        } else {
             countdownEl.style.background = '#e3f2fd';
             countdownEl.style.borderColor = '#90caf9';
             countdownEl.style.color = '#1976d2';
@@ -186,15 +174,10 @@ function startExpirationCountdown() {
     }, 1000);
 }
 
-/**
- * Handles what happens when the code expires
- */
 async function handleCodeExpiration() {
-    // Remove countdown element
     const countdownEl = document.getElementById('expirationCountdown');
     if (countdownEl) countdownEl.remove();
     
-    // Clean up Firebase
     if (transferCode) {
         try {
             await remove(ref(db, `offers/${transferCode}`));
@@ -204,7 +187,6 @@ async function handleCodeExpiration() {
         }
     }
     
-    // Close peer connection
     if (peerConnection) {
         peerConnection.close();
         peerConnection = null;
@@ -215,21 +197,14 @@ async function handleCodeExpiration() {
         dataChannel = null;
     }
     
-    // Show expiration message
     showStatus('❌ Transfer code expired. Please create a new transfer.', 'error');
     statusText.textContent = 'Code expired';
     
-    // Reset UI after 3 seconds
     setTimeout(() => {
         location.reload();
     }, 3000);
 }
 
-/**
- * Checks if a code has expired (for receivers)
- * @param {string} code - The transfer code to check
- * @returns {boolean} - True if valid, false if expired
- */
 async function checkCodeExpiration(code) {
     const offerSnapshot = await get(ref(db, `offers/${code}`));
     if (!offerSnapshot.exists()) return false;
@@ -238,7 +213,6 @@ async function checkCodeExpiration(code) {
     const age = Date.now() - offerData.timestamp;
     
     if (age > EXPIRATION_DURATION) {
-        // Clean up expired code
         try {
             await remove(ref(db, `offers/${code}`));
             await remove(ref(db, `answers/${code}`));
@@ -299,8 +273,7 @@ function updateProgress(current, total) {
             transferSpeed.textContent = formatSpeed(speed);
 
             const remaining = total - current;
-            timeRemaining.textContent =
-                remaining > 0 ? formatTime(remaining / speed) : '0s';
+            timeRemaining.textContent = remaining > 0 ? formatTime(remaining / speed) : '0s';
         } else if (current < total) {
             transferSpeed.textContent = '—';
             timeRemaining.textContent = '--:--';
@@ -312,14 +285,12 @@ function updateProgress(current, total) {
 
 function showFileInfo(file) {
     if (selectedFiles.length > 1) {
-        // Show multiple files info
         const totalSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
         fileName.textContent = `${selectedFiles.length} files selected`;
         fileSize.innerHTML = `Total size: ${formatFileSize(totalSize)}<br><span style="font-size: 12px; color: #999;">Click to view all files</span>`;
         fileSize.style.cursor = 'pointer';
         fileSize.style.whiteSpace = 'normal';
         
-        // Add click handler to toggle file list
         fileSize.onclick = () => {
             const existingList = document.getElementById('fileListExpanded');
             if (existingList) {
@@ -346,7 +317,6 @@ function showFileInfo(file) {
     fileInfo.classList.add('active');
 }
 
-// ------------------- Save Received File -------------------
 function saveReceivedFile(fileMeta, chunks) {
     const blob = new Blob(chunks, { type: fileMeta.type });
     const url = URL.createObjectURL(blob);
@@ -360,21 +330,16 @@ function saveReceivedFile(fileMeta, chunks) {
     showStatus(`✓ Downloaded ${fileMeta.name}`, 'success');
 }
 
-// SENDER
-// SENDER - Replace your entire createOffer function with this:
+// ------------------- SENDER -------------------
 async function createOffer(files) {
     selectedFiles = Array.from(files);
     transferCode = generateCode();
     currentFileIndex = 0;
     
-    // Show all selected files
     showFileInfo(selectedFiles[0]);
-
     selectedFile = selectedFiles[0];
-    
     shareCode.textContent = transferCode;
     
-    // START THE EXPIRATION COUNTDOWN
     startExpirationCountdown();
     
     dropZone.style.display = 'none';
@@ -382,17 +347,20 @@ async function createOffer(files) {
     orDivider.style.display = 'flex';
 
     // Generate QR code
-    qrCodeContainer.innerHTML = ''; // Clear previous QR code
-    
+    qrCodeContainer.innerHTML = '';
     const shareUrl = `${window.location.origin}${window.location.pathname}?code=${transferCode}`;
-    new QRCode(qrCodeContainer, {
-        text: shareUrl,
-        width: 200,
-        height: 200,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-    });
+    
+    // Check if QRCode is available
+    if (typeof QRCode !== 'undefined') {
+        new QRCode(qrCodeContainer, {
+            text: shareUrl,
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+        });
+    }
     
     qrSection.classList.add('active');
 
@@ -410,13 +378,11 @@ async function createOffer(files) {
         await sendFiles();
     };
 
-    // Collect ICE candidates
     const iceCandidates = [];
     peerConnection.onicecandidate = async (event) => {
         if (event.candidate) {
             iceCandidates.push(event.candidate.toJSON());
         } else {
-            // All candidates gathered
             await set(ref(db, `offers/${transferCode}`), {
                 sdp: peerConnection.localDescription.sdp,
                 candidates: iceCandidates,
@@ -438,7 +404,9 @@ async function createOffer(files) {
         const data = snapshot.val();
         await peerConnection.setRemoteDescription({ type: 'answer', sdp: data.sdp });
         if (data.candidates) {
-            for (const c of data.candidates) await peerConnection.addIceCandidate(new RTCIceCandidate(c));
+            for (const c of data.candidates) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(c));
+            }
         }
         await remove(answerRef);
     });
@@ -467,7 +435,9 @@ async function sendFiles() {
             const chunk = file.slice(start, end);
             const arrayBuffer = await chunk.arrayBuffer();
 
-            while (dataChannel.bufferedAmount > CHUNK_SIZE * 4) await new Promise(r => setTimeout(r, 10));
+            while (dataChannel.bufferedAmount > CHUNK_SIZE * 4) {
+                await new Promise(r => setTimeout(r, 10));
+            }
             dataChannel.send(arrayBuffer);
             sentBytes += (end - start);
             updateProgress(sentBytes, totalBytes);
@@ -478,13 +448,10 @@ async function sendFiles() {
     transferSpeed.textContent = formatSpeed(0);
     timeRemaining.textContent = '0s';
     progressPercent.textContent = '100%';
-
 }
 
-// RECEIVER
-// RECEIVER - Replace your entire createAnswer function with this:
+// ------------------- RECEIVER -------------------
 async function createAnswer(code) {
-    // CHECK IF CODE IS EXPIRED
     showStatus('Checking code validity...', 'info');
     const isValid = await checkCodeExpiration(code);
     if (!isValid) {
@@ -494,12 +461,13 @@ async function createAnswer(code) {
     showStatus('Looking for transfer...', 'info');
     
     const offerSnapshot = await get(ref(db, `offers/${code}`));
-    if (!offerSnapshot.exists()) return showStatus('❌ Invalid code or transfer expired', 'error');
+    if (!offerSnapshot.exists()) {
+        return showStatus('❌ Invalid code or transfer expired', 'error');
+    }
 
     const offerData = offerSnapshot.val();
     const filesInfo = Array.isArray(offerData.fileInfo) ? offerData.fileInfo : [offerData.fileInfo];
     
-    // Display all files that will be received
     if (filesInfo.length > 1) {
         const totalSize = filesInfo.reduce((sum, f) => sum + f.size, 0);
         fileName.textContent = `${filesInfo.length} files incoming`;
@@ -507,7 +475,6 @@ async function createAnswer(code) {
         fileSize.style.cursor = 'pointer';
         fileSize.style.whiteSpace = 'normal';
         
-        // Add click handler to toggle file list
         fileSize.onclick = () => {
             const existingList = document.getElementById('fileListExpanded');
             if (existingList) {
@@ -542,13 +509,11 @@ async function createAnswer(code) {
 
     peerConnection = new RTCPeerConnection(config);
 
-   // RECEIVER: show progress while receiving
     peerConnection.ondatachannel = event => {
         dataChannel = event.channel;
         dataChannel.binaryType = 'arraybuffer';
 
         dataChannel.onmessage = e => {
-            // File info arrives first as a JSON string
             if (typeof e.data === 'string') {
                 currentReceivedFile = JSON.parse(e.data);
                 totalSize = currentReceivedFile.size;
@@ -558,7 +523,6 @@ async function createAnswer(code) {
                 lastUpdate = Date.now();
                 bytesAtLastUpdate = 0;
 
-                // Show progress UI for receiver
                 stats.style.display = 'flex';
                 progressBar.classList.add('active');
                 progressFill.style.width = '0%';
@@ -570,23 +534,19 @@ async function createAnswer(code) {
                 return;
             }
 
-            // Receiving actual file chunks
             receivedChunks.push(e.data);
             receivedSize += e.data.byteLength;
             updateProgress(receivedSize, totalSize);
 
-            // File fully received
             if (receivedSize >= totalSize) {
                 saveReceivedFile(currentReceivedFile, receivedChunks);
                 receivedFiles.push(currentReceivedFile);
 
-                // Reset variables
                 receivedChunks = [];
                 currentReceivedFile = null;
                 receivedSize = 0;
                 totalSize = 0;
 
-                // Hide progress UI after completion
                 stats.style.display = 'none';
                 progressBar.classList.remove('active');
                 progressFill.style.width = '0%';
@@ -604,8 +564,6 @@ async function createAnswer(code) {
         };
     };
 
-
-    // Collect ICE candidates
     const iceCandidates = [];
     peerConnection.onicecandidate = async event => {
         if (event.candidate) {
@@ -621,14 +579,16 @@ async function createAnswer(code) {
 
     await peerConnection.setRemoteDescription({ type: 'offer', sdp: offerData.sdp });
     if (offerData.candidates) {
-        for (const c of offerData.candidates) await peerConnection.addIceCandidate(new RTCIceCandidate(c));
+        for (const c of offerData.candidates) {
+            await peerConnection.addIceCandidate(new RTCIceCandidate(c));
+        }
     }
 
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
 }
 
-// UI Event Handlers
+// ------------------- UI Event Handlers -------------------
 dropZone.addEventListener('click', () => fileInput.click());
 
 dropZone.addEventListener('dragover', (e) => {
@@ -662,48 +622,49 @@ copyBtn.addEventListener('click', () => {
     });
 });
 
-// Share Code button
-document.getElementById('shareCodeBtn').addEventListener('click', async () => {
-    const code = shareCode.textContent;
-    const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
-    
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                title: 'Sendvia File Transfer',
-                text: `Use code ${code} to download the file`,
-                url: shareUrl
+const shareCodeBtn = document.getElementById('shareCodeBtn');
+if (shareCodeBtn) {
+    shareCodeBtn.addEventListener('click', async () => {
+        const code = shareCode.textContent;
+        const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
+        
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Sendvia File Transfer',
+                    text: `Use code ${code} to download the file`,
+                    url: shareUrl
+                });
+            } catch (err) {
+                console.log('Share cancelled');
+            }
+        } else {
+            navigator.clipboard.writeText(code).then(() => {
+                const originalHTML = shareCodeBtn.innerHTML;
+                shareCodeBtn.innerHTML = '✓ Copied!';
+                setTimeout(() => {
+                    shareCodeBtn.innerHTML = originalHTML;
+                }, 2000);
             });
-        } catch (err) {
-            console.log('Share cancelled');
         }
-    } else {
-        // Fallback: copy code
-        navigator.clipboard.writeText(code).then(() => {
-            const btn = document.getElementById('shareCodeBtn');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '✓ Copied!';
+    });
+}
+
+const copyLinkBtn = document.getElementById('copyLinkBtn');
+if (copyLinkBtn) {
+    copyLinkBtn.addEventListener('click', () => {
+        const code = shareCode.textContent;
+        const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
+        
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            const originalHTML = copyLinkBtn.innerHTML;
+            copyLinkBtn.innerHTML = '✓ Link Copied!';
             setTimeout(() => {
-                btn.innerHTML = originalHTML;
+                copyLinkBtn.innerHTML = originalHTML;
             }, 2000);
         });
-    }
-});
-
-// Copy Link button
-document.getElementById('copyLinkBtn').addEventListener('click', () => {
-    const code = shareCode.textContent;
-    const shareUrl = `${window.location.origin}${window.location.pathname}?code=${code}`;
-    
-    navigator.clipboard.writeText(shareUrl).then(() => {
-        const btn = document.getElementById('copyLinkBtn');
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = '✓ Link Copied!';
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-        }, 2000);
     });
-});
+}
 
 connectBtn.addEventListener('click', () => {
     const code = codeInput.value.toUpperCase().trim();
@@ -718,7 +679,6 @@ codeInput.addEventListener('input', (e) => {
     const code = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
     e.target.value = code;
     
-    // Update URL bar to show the code
     if (code.length === 6) {
         const newUrl = new URL(window.location);
         newUrl.searchParams.set('code', code);
@@ -736,6 +696,7 @@ codeInput.addEventListener('keypress', (e) => {
     }
 });
 
+// ------------------- Version & Changelog -------------------
 const VERSION_ELEMENT = document.getElementById("versionText");
 const CHANGELOG_URL = "https://raw.githubusercontent.com/sendvia/sendvia.github.io/main/CHANGELOG.md";
 const REPO_OWNER = "sendvia";
@@ -748,9 +709,8 @@ async function fetchVersionFromChangelog() {
         if (!res.ok) throw new Error("Failed to fetch changelog");
         const text = await res.text();
 
-        // Match first line starting with "## v1.2.0"
         const match = text.match(/^##\s+v?([0-9]+\.[0-9]+\.[0-9]+)/m);
-        if (match) return match[1]; // just "1.2.0"
+        if (match) return match[1];
         return "unknown";
     } catch (err) {
         console.warn("Could not fetch version from changelog:", err);
@@ -769,16 +729,14 @@ async function fetchLatestCommitHash() {
 }
 
 async function updateVersionText() {
-    const versionNumber = await fetchVersionFromChangelog();
-    const hash = await fetchLatestCommitHash();
-
-    VERSION_ELEMENT.textContent = `v${versionNumber} • build ${hash}`;
+    if (VERSION_ELEMENT) {
+        const versionNumber = await fetchVersionFromChangelog();
+        const hash = await fetchLatestCommitHash();
+        VERSION_ELEMENT.textContent = `v${versionNumber} • build ${hash}`;
+    }
 }
 
-// Run it
 updateVersionText();
-
-
 
 const changelogBtn = document.getElementById("changelogBtn");
 const changelogModal = document.getElementById("changelogModal");
@@ -792,89 +750,96 @@ const HEADER_CLASS_MAP = {
     fixed: "changelog-body-fixed"
 };
 
-changelogBtn.addEventListener("click", async () => {
-    changelogModal.classList.add("active");
+if (changelogBtn && changelogModal && changelogBody) {
+    changelogBtn.addEventListener("click", async () => {
+        changelogModal.classList.add("active");
 
-    if (changelogBody.dataset.loaded) return;
+        if (changelogBody.dataset.loaded) return;
 
-    try {
-        const res = await fetch(`${CHANGELOG_URL}?t=${Date.now()}`);
-        if (!res.ok) throw new Error("Fetch failed");
-        const text = await res.text();
+        try {
+            const res = await fetch(`${CHANGELOG_URL}?t=${Date.now()}`);
+            if (!res.ok) throw new Error("Fetch failed");
+            const text = await res.text();
 
-        // Markdown parser
-        let html = text
-            .split('\n')
-            .map(line => {
-                // Headers
-                if (line.startsWith('### ')) {
-                    const headerText = line.slice(4).trim();
-                    const headerClass = HEADER_CLASS_MAP[headerText.toLowerCase()];
-                    if (headerClass) {
-                        return `<h3 class="${headerClass}">${headerText}</h3>`;
+            // Markdown parser
+            let html = text
+                .split('\n')
+                .map(line => {
+                    // Headers
+                    if (line.startsWith('### ')) {
+                        const headerText = line.slice(4).trim();
+                        const headerClass = HEADER_CLASS_MAP[headerText.toLowerCase()];
+                        if (headerClass) {
+                            return `<h3 class="${headerClass}">${headerText}</h3>`;
+                        }
+                        return `<h3>${headerText}</h3>`;
                     }
-                    return `<h3>${headerText}</h3>`;
-                }
-                if (line.startsWith('## ')) {
-                    return `<h2>${line.slice(3)}</h2>`;
-                }
-                if (line.startsWith('# ')) {
-                    return `<h1>${line.slice(2)}</h1>`;
-                }
+                    if (line.startsWith('## ')) {
+                        return `<h2>${line.slice(3)}</h2>`;
+                    }
+                    if (line.startsWith('# ')) {
+                        return `<h1>${line.slice(2)}</h1>`;
+                    }
 
-                // List items
-                if (line.startsWith('- ')) {
-                    return `<li>${line.slice(2)}</li>`;
-                }
+                    // List items
+                    if (line.startsWith('- ')) {
+                        return `<li>${line.slice(2)}</li>`;
+                    }
 
-                // Empty lines
-                if (line.trim() === '') {
-                    return '<br>';
-                }
+                    // Empty lines
+                    if (line.trim() === '') {
+                        return '<br>';
+                    }
 
-                return line;
-            })
-            .join('\n');
+                    return line;
+                })
+                .join('\n');
 
-        // Wrap consecutive <li> in <ul>
-        html = html.replace(/(<li>.*?<\/li>\n?)+/gs, match => `<ul>${match}</ul>`);
+            // Wrap consecutive <li> in <ul>
+            html = html.replace(/(<li>.*?<\/li>\n?)+/gs, match => `<ul>${match}</ul>`);
 
-        changelogBody.innerHTML = html;
-        changelogBody.dataset.loaded = "true";
-    } catch {
-        changelogBody.textContent = "Failed to load changelog.";
-    }
-});
+            changelogBody.innerHTML = html;
+            changelogBody.dataset.loaded = "true";
+        } catch (err) {
+            console.error('Changelog fetch error:', err);
+            changelogBody.textContent = "Failed to load changelog.";
+        }
+    });
+}
 
-
-closeChangelog.addEventListener("click", () => {
-    changelogModal.classList.remove("active");
-});
-
-changelogModal.addEventListener("click", (e) => {
-    if (e.target === changelogModal) {
+if (closeChangelog && changelogModal) {
+    closeChangelog.addEventListener("click", () => {
         changelogModal.classList.remove("active");
-    }
-});
+    });
+
+    changelogModal.addEventListener("click", (e) => {
+        if (e.target === changelogModal) {
+            changelogModal.classList.remove("active");
+        }
+    });
+}
 
 // Add cleanup on page unload
 window.addEventListener('beforeunload', async () => {
     // Clear expiration timer
-    if (expirationTimer) {
+    if (typeof expirationTimer !== 'undefined' && expirationTimer) {
         clearInterval(expirationTimer);
         expirationTimer = null;
     }
     
-    if (transferCode) {
+    if (typeof transferCode !== 'undefined' && transferCode) {
         try {
-            await remove(ref(db, `offers/${transferCode}`));
-            await remove(ref(db, `answers/${transferCode}`));
+            // Make sure db and ref are available
+            if (typeof db !== 'undefined' && typeof ref !== 'undefined' && typeof remove !== 'undefined') {
+                await remove(ref(db, `offers/${transferCode}`));
+                await remove(ref(db, `answers/${transferCode}`));
+            }
         } catch (e) {
             console.error('Cleanup failed:', e);
         }
     }
     
-    if (peerConnection) {
+    if (typeof peerConnection !== 'undefined' && peerConnection) {
         peerConnection.close();
     }
 });
@@ -882,47 +847,60 @@ window.addEventListener('beforeunload', async () => {
 const toggleQrBtn = document.getElementById('toggleQrBtn');
 const qrDependent = document.querySelector('.qr-dependent');
 
-toggleQrBtn.addEventListener('click', () => {
-    const isVisible = qrDependent.classList.toggle('show-qr');
-    toggleQrBtn.textContent = isVisible ? 'Hide QR' : 'Show QR';
-});
+if (toggleQrBtn && qrDependent) {
+    toggleQrBtn.addEventListener('click', () => {
+        const isVisible = qrDependent.classList.toggle('show-qr');
+        toggleQrBtn.textContent = isVisible ? 'Hide QR' : 'Show QR';
+    });
+}
 
 const helpBtn = document.getElementById("helpBtn");
 const helpModal = document.getElementById("helpModal");
 const helpClose = document.getElementById("helpClose");
 
-helpBtn.addEventListener("click", () => {
-    helpModal.classList.add("active");
-});
+if (helpBtn && helpModal) {
+    helpBtn.addEventListener("click", () => {
+        helpModal.classList.add("active");
+    });
+}
 
-helpClose.addEventListener("click", () => {
-    helpModal.classList.remove("active");
-});
-
-helpModal.addEventListener("click", (e) => {
-    if (e.target === helpModal) {
+if (helpClose && helpModal) {
+    helpClose.addEventListener("click", () => {
         helpModal.classList.remove("active");
-    }
-});
+    });
+
+    helpModal.addEventListener("click", (e) => {
+        if (e.target === helpModal) {
+            helpModal.classList.remove("active");
+        }
+    });
+}
 
 const aboutBtn = document.getElementById("aboutBtn");
 const aboutModal = document.getElementById("aboutModal");
 const aboutClose = document.getElementById("aboutClose");
 
-aboutBtn.addEventListener("click", () => {
-    aboutModal.classList.add("active");
-});
+if (aboutBtn && aboutModal) {
+    aboutBtn.addEventListener("click", () => {
+        aboutModal.classList.add("active");
+    });
+}
 
-aboutClose.addEventListener("click", () => {
-    aboutModal.classList.remove("active");
-});
-
-aboutModal.addEventListener("click", (e) => {
-    if (e.target === aboutModal) {
+if (aboutClose && aboutModal) {
+    aboutClose.addEventListener("click", () => {
         aboutModal.classList.remove("active");
-    }
-});
+    });
 
-document.getElementById('privacyBtn').addEventListener('click', () => {
-  window.open('/privacy-terms', '_blank', 'noopener,noreferrer');
-});
+    aboutModal.addEventListener("click", (e) => {
+        if (e.target === aboutModal) {
+            aboutModal.classList.remove("active");
+        }
+    });
+}
+
+const privacyBtn = document.getElementById('privacyBtn');
+if (privacyBtn) {
+    privacyBtn.addEventListener('click', () => {
+        window.open('/privacy-terms', '_blank', 'noopener,noreferrer');
+    });
+}

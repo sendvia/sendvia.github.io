@@ -1,3 +1,16 @@
+## v1.7.2
+### Fixed
+- Added null checks for all DOM elements to prevent runtime errors
+- Fixed missing formatCountdown() function (was calling undefined function)
+- Added QRCode library existence check before initialization
+- Improved error handling in changelog fetch with proper catch blocks
+- Added variable existence checks in beforeunload cleanup handler
+- Fixed potential errors when optional UI elements are missing from page
+
+### Changed
+- Improved code robustness with defensive programming patterns
+- Enhanced modal handlers with consistent null-checking approach
+
 ## v1.7.1
 ### Changed
 - Updated countdown time format from MM:SS to human-readable format (e.g., 15m 31s)
