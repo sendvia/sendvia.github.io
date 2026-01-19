@@ -1,3 +1,7 @@
+## v1.7.1
+### Changed
+- Updated countdown time format from MM:SS to human-readable format (e.g., 15m 31s)
+
 ## v1.7.0
 ### Added
 - 15-minute code expiration timer with live countdown display for senders
