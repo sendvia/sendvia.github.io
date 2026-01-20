@@ -1,6 +1,6 @@
 ## v1.7.3
 ### Added
-- Full-screen, glass-style <noscript> overlay for users with JavaScript disabled
+- Full-screen, glass-style noscript overlay for users with JavaScript disabled
 - Animated fade-in + slide-up effect for the overlay box
 - Inter font used for consistent typography
 
