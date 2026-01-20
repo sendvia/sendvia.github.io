@@ -1618,6 +1618,82 @@
   }
 }
 
+.noscript-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 30, 30, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  font-family: 'Inter', sans-serif;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Glass box with fade-in + slide-up animation */
+.noscript-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  color: #fff;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeSlideIn 0.8s forwards;
+}
+
+/* Animation keyframes */
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Heading */
+.noscript-box h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+/* Paragraphs */
+.noscript-box p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #e0e0e0;
+}
+
+/* Link button */
+.noscript-box a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: rgba(76, 175, 80, 0.8);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.noscript-box a:hover {
+  background-color: rgba(76, 175, 80, 1);
+  transform: translateY(-2px);
+}
+
 /* Mobile optimization */
 @media (max-width: 640px) {
   .loader-logo {
@@ -1638,6 +1714,20 @@
 
 /* <--------------------------- MOBILE UIs ---------------------------> */
 @media (max-width: 640px) {
+  .noscript-box {
+    padding: 2rem 1rem;
+  }
+  .noscript-box h1 {
+    font-size: 1.6rem;
+  }
+  .noscript-box p {
+    font-size: 0.95rem;
+  }
+  .noscript-box a {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+  
   #expirationCountdown {
         font-size: 13px;
         padding: 6px 10px;
