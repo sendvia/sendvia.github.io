@@ -2,8 +2,6 @@
 ### Added
 - Full-screen, glass-style <noscript> overlay for users with JavaScript disabled
 - Animated fade-in + slide-up effect for the overlay box
-- Mobile-friendly design: responsive font sizes, padding, and max-width 640px
-- Styled "Learn how to enable JavaScript" button with hover effect
 - Inter font used for consistent typography
 
 ## v1.7.2
