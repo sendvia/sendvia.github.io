@@ -132,7 +132,6 @@ body::after {
     0 0 0 1px rgba(255, 255, 255, 0.1) inset,
     0 20px 60px rgba(0, 0, 0, 0.4),
     0 0 80px rgba(102, 126, 234, 0.1);
-  animation: containerFloat 6s ease-in-out infinite;
   position: relative;
   overflow: hidden;
 }
@@ -148,18 +147,86 @@ body::after {
   animation: shimmer 8s infinite;
 }
 
+/* ==================== TOP CONTROLS ==================== */
+.top-controls {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 10;
+}
+
+.theme-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  left: 20px;
+  top: 0;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.theme-toggle .sun-icon {
+  display: block;
+}
+
+.theme-toggle .moon-icon {
+  display: none;
+}
+
+.theme-toggle.dark-mode .sun-icon {
+  display: none;
+}
+
+.theme-toggle.dark-mode .moon-icon {
+  display: block;
+}
+
+.glass-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 500;
+  position: absolute;
+  right: 20px;
+  top: 0;
+}
+
+.glass-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.glass-mode-btn.active {
+  background: rgba(120, 255, 150, 0.2);
+  border-color: rgba(120, 255, 150, 0.4);
+  color: #78ff96;
+}
+
 @keyframes shimmer {
   0%, 100% { left: -100%; }
   50% { left: 100%; }
-}
-
-@keyframes containerFloat {
-  0%, 100% {
-    transform: translateY(0) rotateX(0deg);
-  }
-  50% {
-    transform: translateY(-5px) rotateX(1deg);
-  }
 }
 
 /* ==================== HEADER WITH NEON EFFECTS ==================== */
@@ -624,6 +691,35 @@ body.minimal-mode {
   animation: none;
 }
 
+body.minimal-mode .theme-toggle {
+  display: flex !important;
+  left: 20px;
+  right: auto;
+}
+
+body.minimal-mode .glass-mode-btn {
+  right: 20px;
+  left: auto;
+}
+
+body.minimal-mode .glass-mode-btn {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  color: #666;
+}
+
+body.minimal-mode .glass-mode-btn:hover {
+  background: #eee;
+  border-color: #ccc;
+  color: #333;
+}
+
+body.minimal-mode .glass-mode-btn.active {
+  background: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
+
 body.minimal-mode::before,
 body.minimal-mode::after {
   display: none;
@@ -707,6 +803,15 @@ body.minimal-mode p {
   color: #555;
 }
 
+body.minimal-mode .about-body a {
+  color: #1565c0;
+}
+
+body.minimal-mode .about-body a:hover {
+  color: #0d47a1;
+  border-bottom-color: #0d47a1;
+}
+
 body.minimal-mode ul {
   background: #fafafa;
   border-color: #e0e0e0;
@@ -779,6 +884,152 @@ body.minimal-mode ::-webkit-scrollbar-thumb {
 
 body.minimal-mode ::-webkit-scrollbar-thumb:hover {
   background: #aaa;
+}
+
+/* ==================== MINIMAL THEME MODE - DARK ==================== */
+body.minimal-mode.minimal-dark {
+  background: #1a1a1a;
+}
+
+body.minimal-mode.minimal-dark .container {
+  background: #2d2d2d;
+  border-color: #404040;
+}
+
+/* Top controls in minimal dark mode */
+body.minimal-mode.minimal-dark .theme-toggle {
+  background: #333;
+  border-color: #555;
+  color: #f0f0f0;
+}
+
+body.minimal-mode.minimal-dark .theme-toggle:hover {
+  background: #444;
+  border-color: #666;
+}
+
+body.minimal-mode.minimal-dark .glass-mode-btn {
+  background: #1b4d1e;
+  border-color: #4caf50;
+  color: #78ff96;
+}
+
+body.minimal-mode.minimal-dark .glass-mode-btn:hover {
+  background: #2e7d32;
+}
+
+body.minimal-mode.minimal-dark h1 {
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: #f0f0f0;
+  color: #f0f0f0;
+}
+
+body.minimal-mode.minimal-dark h2 {
+  color: #f0f0f0;
+  border-color: #404040;
+}
+
+body.minimal-mode.minimal-dark h3 {
+  color: #f0f0f0;
+  border-color: #404040;
+}
+
+body.minimal-mode.minimal-dark h3::before {
+  background: #888;
+}
+
+body.minimal-mode.minimal-dark p {
+  color: #b0b0b0;
+}
+
+body.minimal-mode.minimal-dark ul {
+  background: #333;
+  border-color: #404040;
+}
+
+body.minimal-mode.minimal-dark li {
+  color: #aaa;
+}
+
+body.minimal-mode.minimal-dark li::before {
+  color: #888;
+  text-shadow: none;
+}
+
+body.minimal-mode.minimal-dark .highlight-box {
+  background: rgba(120, 255, 150, 0.1);
+  border-color: rgba(120, 255, 150, 0.3);
+  border-left-color: #78ff96;
+  box-shadow: none;
+  animation: none;
+}
+
+body.minimal-mode.minimal-dark .highlight-box p {
+  color: #78ff96;
+}
+
+body.minimal-mode.minimal-dark strong {
+  color: #f0f0f0;
+}
+
+body.minimal-mode.minimal-dark .last-updated {
+  color: #888;
+  border-color: #404040;
+}
+
+body.minimal-mode.minimal-dark .back-link {
+  background: #444;
+  box-shadow: none;
+}
+
+body.minimal-mode.minimal-dark .back-link:hover {
+  background: #555;
+  box-shadow: none;
+}
+
+body.minimal-mode.minimal-dark .back-link::before {
+  display: none;
+}
+
+body.minimal-mode.minimal-dark .nav-tabs {
+  border-color: #404040;
+}
+
+body.minimal-mode.minimal-dark .tab {
+  background: #333;
+  border-color: #404040;
+  color: #aaa;
+}
+
+body.minimal-mode.minimal-dark .tab:hover {
+  background: #3d3d3d;
+  border-color: #555;
+  color: #f0f0f0;
+}
+
+body.minimal-mode.minimal-dark .tab.active {
+  background: #4caf50;
+  border-color: #4caf50;
+  color: #fff;
+  box-shadow: none;
+}
+
+body.minimal-mode.minimal-dark ::-webkit-scrollbar-track {
+  background: #222;
+}
+
+body.minimal-mode.minimal-dark ::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+body.minimal-mode.minimal-dark ::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+body.minimal-mode.minimal-dark ::selection {
+  background: rgba(120, 255, 150, 0.3);
+  color: #f0f0f0;
 }
 
 /* ==================== REDUCED MOTION ==================== */

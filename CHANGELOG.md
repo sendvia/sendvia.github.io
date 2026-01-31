@@ -1,3 +1,24 @@
+## v1.8.1
+### Added
+- **Glass Mode toggle** - Replaced "Simple Mode" with "Glass Mode" button that enables fancy effects when clicked
+- **Light/Dark mode toggle** - Added sun/moon icon button that only appears in simple mode (non-glass)
+- **Cross-page theme sync** - Theme preferences sync between main page and privacy-terms page via localStorage
+- **Privacy & Terms dark mode** - Full dark/light mode support added to privacy-terms page
+
+### Changed
+- **Default mode changed** - Website now loads in clean simple mode by default (no particles/glass effects)
+- **Button positioning** - Glass Mode button moved to top-right corner, Light/Dark toggle to top-left corner
+- **Vertical alignment** - Both control buttons now align vertically with Sendvia logo (Y-axis centered)
+- **Loading screen colors** - Fixed loader colors to display properly in light simple mode
+- **About section links** - Fixed "View source code" link color for better visibility in light mode
+- **Removed 3D tilt effect** - Removed mouse-tracking 3D tilt animation from main container
+- **Removed floating animation** - Removed floating animation from container to reduce motion
+
+### Fixed
+- **Text contrast issues** - Fixed multiple text color issues in light simple mode for better accessibility
+- **Privacy-terms visibility** - Fixed theme toggle and Glass Mode button visibility on privacy-terms page
+- **Link colors in About modal** - GitHub/source code links now display in proper dark blue in light mode
+
 ## v1.8.0
 ### Added
 - Complete visual redesign with premium dark theme and animated gradient mesh background

@@ -798,6 +798,9 @@ if (changelogBtn && changelogModal && changelogBody) {
             // Wrap consecutive <li> in <ul>
             html = html.replace(/(<li>.*?<\/li>\n?)+/gs, match => `<ul>${match}</ul>`);
 
+            // Convert bold text **text** to <strong>text</strong>
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
             changelogBody.innerHTML = html;
             changelogBody.dataset.loaded = "true";
         } catch (err) {
@@ -905,123 +908,98 @@ if (privacyBtn) {
     });
 }
 
-// ==================== 3D TILT EFFECT ====================
-const container = document.querySelector('.container');
-if (container && !window.matchMedia('(pointer: coarse)').matches) {
-    container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = (y - centerY) / 30;
-        const rotateY = (centerX - x) / 30;
-        
-        container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+// ==================== GLASS MODE & THEME TOGGLE ====================
+const glassModeBtn = document.getElementById('glassModeBtn');
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+// Default to simple mode (no fancy effects)
+const savedMode = localStorage.getItem('sendvia-glass-mode');
+const savedTheme = localStorage.getItem('sendvia-theme');
+
+// Initialize - default to simple mode (minimal-mode class present)
+// Glass mode enabled = no minimal-mode class (fancy effects)
+if (savedMode === 'true') {
+    enableGlassMode();
+} else {
+    disableGlassMode();
+}
+
+// Load theme preference (only applies in simple mode, not glass mode)
+if (savedTheme === 'dark') {
+    enableDarkMode();
+} else {
+    enableLightMode();
+}
+
+function enableGlassMode() {
+    // Remove minimal-mode to show fancy glass effects
+    body.classList.remove('minimal-mode');
+    if (glassModeBtn) {
+        glassModeBtn.classList.add('active');
+    }
+    // Hide theme toggle when in glass mode (fancy mode)
+    if (themeToggle) {
+        themeToggle.style.display = 'none';
+    }
+    localStorage.setItem('sendvia-glass-mode', 'true');
+}
+
+function disableGlassMode() {
+    // Add minimal-mode for simple clean look
+    body.classList.add('minimal-mode');
+    if (glassModeBtn) {
+        glassModeBtn.classList.remove('active');
+    }
+    // Show theme toggle when in simple mode
+    if (themeToggle) {
+        themeToggle.style.display = 'flex';
+    }
+    localStorage.setItem('sendvia-glass-mode', 'false');
+}
+
+function enableDarkMode() {
+    body.classList.add('minimal-dark');
+    if (themeToggle) {
+        themeToggle.classList.add('dark-mode');
+    }
+    localStorage.setItem('sendvia-theme', 'dark');
+}
+
+function enableLightMode() {
+    body.classList.remove('minimal-dark');
+    if (themeToggle) {
+        themeToggle.classList.remove('dark-mode');
+    }
+    localStorage.setItem('sendvia-theme', 'light');
+}
+
+function toggleTheme() {
+    if (body.classList.contains('minimal-dark')) {
+        enableLightMode();
+    } else {
+        enableDarkMode();
+    }
+}
+
+// Event listeners
+if (glassModeBtn) {
+    glassModeBtn.addEventListener('click', () => {
+        if (body.classList.contains('minimal-mode')) {
+            // Currently in simple mode, enable glass mode
+            enableGlassMode();
+        } else {
+            // Currently in glass mode, disable it (go to simple)
+            disableGlassMode();
+        }
     });
-    
-    container.addEventListener('mouseleave', () => {
-        container.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-        container.style.transition = 'transform 0.5s ease';
-        setTimeout(() => {
-            container.style.transition = '';
-        }, 500);
+}
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        // Only toggle theme if in simple mode (not glass mode)
+        if (body.classList.contains('minimal-mode')) {
+            toggleTheme();
+        }
     });
 }
-
-// ==================== BUTTON RIPPLE EFFECT ====================
-function createRipple(e, button) {
-    const ripple = document.createElement('span');
-    const rect = button.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = e.clientX - rect.left - size / 2;
-    const y = e.clientY - rect.top - size / 2;
-    
-    ripple.style.cssText = `
-        position: absolute;
-        width: ${size}px;
-        height: ${size}px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transform: scale(0);
-        animation: rippleEffect 0.6s ease-out;
-        left: ${x}px;
-        top: ${y}px;
-        pointer-events: none;
-    `;
-    
-    button.style.position = 'relative';
-    button.style.overflow = 'hidden';
-    button.appendChild(ripple);
-    
-    setTimeout(() => ripple.remove(), 600);
-}
-
-// Add ripple effect to all buttons
-document.querySelectorAll('.btn, .share-btn').forEach(button => {
-    button.addEventListener('click', (e) => createRipple(e, button));
-});
-
-// Add ripple keyframes dynamically
-const rippleStyle = document.createElement('style');
-rippleStyle.textContent = `
-    @keyframes rippleEffect {
-        to {
-            transform: scale(4);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(rippleStyle);
-
-// ==================== SUCCESS CONFETTI ====================
-function showConfetti() {
-    const colors = ['#667eea', '#764ba2', '#f093fb', '#78ff96', '#78dbff', '#ffc864'];
-    const confettiCount = 100;
-    
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.cssText = `
-            position: fixed;
-            width: ${Math.random() * 10 + 5}px;
-            height: ${Math.random() * 10 + 5}px;
-            background: ${colors[Math.floor(Math.random() * colors.length)]};
-            left: ${Math.random() * 100}vw;
-            top: -20px;
-            border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-            z-index: 9999;
-            pointer-events: none;
-            animation: confettiFall ${Math.random() * 3 + 2}s linear forwards;
-        `;
-        document.body.appendChild(confetti);
-        
-        setTimeout(() => confetti.remove(), 5000);
-    }
-}
-
-// Add confetti keyframes
-const confettiStyle = document.createElement('style');
-confettiStyle.textContent = `
-    @keyframes confettiFall {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(confettiStyle);
-
-// Trigger confetti on successful transfer
-const originalShowStatus = showStatus;
-showStatus = function(message, type) {
-    originalShowStatus(message, type);
-    if (type === 'success' && message.includes('✓ Downloaded') || message.includes('✓ All files sent')) {
-        showConfetti();
-    }
-};

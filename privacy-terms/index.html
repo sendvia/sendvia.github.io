@@ -27,6 +27,32 @@
   </div>
 
   <div class="container">
+    <div class="top-controls">
+      <button id="themeToggle" class="theme-toggle" title="Toggle dark/light mode">
+        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <button id="glassModeBtn" class="glass-mode-btn" title="Enable glass mode (fancy effects)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        Glass Mode
+      </button>
+    </div>
     <div class="header">
       <div class="logo">Sendvia</div>
       <div class="subtitle">Private file transfer between devices</div>
@@ -224,23 +250,13 @@
       </p>
     </div>
 
-    <div style="text-align: center;">
-      <button id="accessibilityBtn" class="accessibility-btn" title="Toggle minimal mode (disable animations and effects)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 16v-4M12 8h.01"></path>
-        </svg>
-        Simple Mode
-      </button>
-    </div>
-
     <div class="last-updated">
       Last updated: January 2025
     </div>
 
-    <div style="text-align: center;">
+    <center>
       <a href="/" class="back-link">← Back to Sendvia</a>
-    </div>
+    </center>
   </div>
 
   <script>
@@ -260,51 +276,98 @@
       event.target.classList.add('active');
     }
 
-    // ==================== MINIMAL/SIMPLE MODE TOGGLE ====================
-    const accessibilityBtn = document.getElementById('accessibilityBtn');
+    // ==================== GLASS MODE & THEME TOGGLE ====================
+    const glassModeBtn = document.getElementById('glassModeBtn');
+    const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
 
-    // Load saved preference
-    const savedMode = localStorage.getItem('sendvia-minimal-mode');
+    // Default to simple mode (no fancy effects)
+    const savedMode = localStorage.getItem('sendvia-glass-mode');
+    const savedTheme = localStorage.getItem('sendvia-theme');
+
+    // Initialize - default to simple mode (minimal-mode class present)
+    // Glass mode enabled = no minimal-mode class (fancy effects)
     if (savedMode === 'true') {
-      enableMinimalMode();
+      enableGlassMode();
+    } else {
+      disableGlassMode();
     }
 
-    function enableMinimalMode() {
-      body.classList.add('minimal-mode');
-      if (accessibilityBtn) {
-        accessibilityBtn.classList.add('active');
-        accessibilityBtn.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          Simple Mode On
-        `;
-      }
+    // Load theme preference (only applies in simple mode, not glass mode)
+    if (savedTheme === 'dark') {
+      enableDarkMode();
+    } else {
+      enableLightMode();
     }
 
-    function disableMinimalMode() {
+    function enableGlassMode() {
+      // Remove minimal-mode to show fancy glass effects
       body.classList.remove('minimal-mode');
-      if (accessibilityBtn) {
-        accessibilityBtn.classList.remove('active');
-        accessibilityBtn.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 16v-4M12 8h.01"></path>
-          </svg>
-          Simple Mode
-        `;
+      if (glassModeBtn) {
+        glassModeBtn.classList.add('active');
+      }
+      // Hide theme toggle when in glass mode (fancy mode)
+      if (themeToggle) {
+        themeToggle.style.display = 'none';
+      }
+      localStorage.setItem('sendvia-glass-mode', 'true');
+    }
+
+    function disableGlassMode() {
+      // Add minimal-mode for simple clean look
+      body.classList.add('minimal-mode');
+      if (glassModeBtn) {
+        glassModeBtn.classList.remove('active');
+      }
+      // Show theme toggle when in simple mode
+      if (themeToggle) {
+        themeToggle.style.display = 'flex';
+      }
+      localStorage.setItem('sendvia-glass-mode', 'false');
+    }
+
+    function enableDarkMode() {
+      body.classList.add('minimal-dark');
+      if (themeToggle) {
+        themeToggle.classList.add('dark-mode');
+      }
+      localStorage.setItem('sendvia-theme', 'dark');
+    }
+
+    function enableLightMode() {
+      body.classList.remove('minimal-dark');
+      if (themeToggle) {
+        themeToggle.classList.remove('dark-mode');
+      }
+      localStorage.setItem('sendvia-theme', 'light');
+    }
+
+    function toggleTheme() {
+      if (body.classList.contains('minimal-dark')) {
+        enableLightMode();
+      } else {
+        enableDarkMode();
       }
     }
 
-    if (accessibilityBtn) {
-      accessibilityBtn.addEventListener('click', () => {
+    // Event listeners
+    if (glassModeBtn) {
+      glassModeBtn.addEventListener('click', () => {
         if (body.classList.contains('minimal-mode')) {
-          disableMinimalMode();
-          localStorage.setItem('sendvia-minimal-mode', 'false');
+          // Currently in simple mode, enable glass mode
+          enableGlassMode();
         } else {
-          enableMinimalMode();
-          localStorage.setItem('sendvia-minimal-mode', 'true');
+          // Currently in glass mode, disable it (go to simple)
+          disableGlassMode();
+        }
+      });
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        // Only toggle theme if in simple mode (not glass mode)
+        if (body.classList.contains('minimal-mode')) {
+          toggleTheme();
         }
       });
     }
