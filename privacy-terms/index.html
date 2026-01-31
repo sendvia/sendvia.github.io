@@ -12,6 +12,20 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Floating Particles Background -->
+  <div class="particles-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
   <div class="container">
     <div class="header">
       <div class="logo">Sendvia</div>
@@ -210,13 +224,23 @@
       </p>
     </div>
 
+    <div style="text-align: center;">
+      <button id="accessibilityBtn" class="accessibility-btn" title="Toggle minimal mode (disable animations and effects)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4M12 8h.01"></path>
+        </svg>
+        Simple Mode
+      </button>
+    </div>
+
     <div class="last-updated">
       Last updated: January 2025
     </div>
 
-    <center>
+    <div style="text-align: center;">
       <a href="/" class="back-link">← Back to Sendvia</a>
-    </center>
+    </div>
   </div>
 
   <script>
@@ -234,6 +258,55 @@
 
       // Add active class to clicked tab
       event.target.classList.add('active');
+    }
+
+    // ==================== MINIMAL/SIMPLE MODE TOGGLE ====================
+    const accessibilityBtn = document.getElementById('accessibilityBtn');
+    const body = document.body;
+
+    // Load saved preference
+    const savedMode = localStorage.getItem('sendvia-minimal-mode');
+    if (savedMode === 'true') {
+      enableMinimalMode();
+    }
+
+    function enableMinimalMode() {
+      body.classList.add('minimal-mode');
+      if (accessibilityBtn) {
+        accessibilityBtn.classList.add('active');
+        accessibilityBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Simple Mode On
+        `;
+      }
+    }
+
+    function disableMinimalMode() {
+      body.classList.remove('minimal-mode');
+      if (accessibilityBtn) {
+        accessibilityBtn.classList.remove('active');
+        accessibilityBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4M12 8h.01"></path>
+          </svg>
+          Simple Mode
+        `;
+      }
+    }
+
+    if (accessibilityBtn) {
+      accessibilityBtn.addEventListener('click', () => {
+        if (body.classList.contains('minimal-mode')) {
+          disableMinimalMode();
+          localStorage.setItem('sendvia-minimal-mode', 'false');
+        } else {
+          enableMinimalMode();
+          localStorage.setItem('sendvia-minimal-mode', 'true');
+        }
+      });
     }
   </script>
 </body>
