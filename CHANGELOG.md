@@ -1,3 +1,39 @@
+## v1.8.0
+### Added
+- Complete visual redesign with premium dark theme and animated gradient mesh background
+- Glassmorphism (frosted glass) effects on main container, modals, and all cards
+- Floating particle animation system in the background
+- Neon glow effects on title, share codes, and interactive elements
+- 3D depth effects with perspective transforms and floating animations
+- Shimmer animations on container and modal backgrounds
+- Button ripple effects for visual feedback on click
+- Confetti celebration animation on successful file transfers
+- 3D tilt effect on main container (desktop only) responding to mouse movement
+- Purple neon accent colors throughout the interface
+- Enhanced modal slide-in animations with 3D perspective transforms
+- Improved scrollbar styling with purple accent color
+- Glass-style cards for list items in content sections
+- Pulsing animations on highlight boxes and status indicators
+
+### Changed
+- Migrated from light theme to premium dark theme with purple/pink/blue gradients
+- Completely redesigned Privacy & Terms page with matching glassmorphism aesthetic
+- Updated all modals (Changelog, Help, About) to use glassmorphism effects
+- Increased modal size (780px vs 650px container) for better visibility
+- Enhanced footer with pill-style version badge and improved button styling
+- Improved text contrast and readability throughout the interface
+- Redesigned share code box with double-layer neon glow and shimmer effect
+- Updated drop zone with stronger neon borders and hover effects
+- Enhanced tab navigation on Privacy & Terms page with glass styling
+- Improved mobile responsiveness with optimized spacing and touch targets
+
+### Fixed
+- Fixed modal positioning by moving HTML structure outside the main container
+- Improved color contrast for better accessibility
+- Enhanced glass effect backdrop blur consistency across browsers
+- Fixed shimmer animation positioning on glass surfaces
+- Improved mobile animation performance by hiding particles on mobile devices
+
 ## v1.7.3
 ### Added
 - Full-screen, glass-style overlay for users with JavaScript disabled
@@ -61,7 +97,7 @@
 
 ## v1.5.0
 ### Added
-- About section describing Sendvia’s purpose and usage.
+- About section describing Sendvia's purpose and usage.
 - Privacy Policy & Terms of Service sections clarifying no data collection, storage, or cookies, and outlining acceptable use and liability limitations.
 
 ### Changed

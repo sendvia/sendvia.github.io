@@ -40,6 +40,30 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Floating Particles Background -->
+  <div class="particles-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
   <div id="pageLoader" class="page-loader">
     <div class="loader-content">
       <div class="loader-logo">Sendvia</div>
@@ -160,180 +184,181 @@
     <div class="copyright-footer">
       © Sendvia
     </div>
+  </div>
 
-    <!---------------------- ABOUT SECTION ---------------------->
+  <!---------------------- ABOUT SECTION ---------------------->
 
-    <div id="aboutModal" class="about-modal">
-      <div class="about-content">
-        <div class="about-header">
-          <span>About Section</span>
-          <button id="aboutClose" aria-label="Close help">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-        <!-- BODY -->
-        <div class="about-body">
-          <h1>About Sendvia</h1>
-          <p>
-            Sendvia is a fast, simple, and privacy-focused file sharing tool designed
-            for direct transfers between people — no accounts, no ads, no storage.
-          </p>
-          <h3>Why did I create this?</h3>
-          <p>
-            Most file-sharing platforms are bloated, slow, or invasive.
-            Sendvia was built to be lightweight, distraction-free, and focused on
-            doing one thing well: sending files directly.
-          </p>
-          <h3>How does Sendvia work?</h3>
-          <p>
-            Files are transferred directly between the sender and receiver using
-            peer-to-peer technology (WebRTC). A temporary code is only used to
-            establish the connection.
-          </p>
-          <h3>Are my files stored on any server?</h3>
-          <p>
-            <strong>No.</strong> Files are never uploaded, stored, logged, or backed up.
-            They move directly from sender to receiver.
-          </p>
-          <ul>
-            <li>No cloud storage</li>
-            <li>No file history</li>
-            <li>No access to your data</li>
-          </ul>
-          <h3>What data is stored?</h3>
-          <p>
-            Only minimal, temporary connection data (such as a transfer code and
-            signaling information) is stored to help peers connect.
-            This data is removed automatically after use.
-          </p>
-          <h3>Is Sendvia open source?</h3>
-          <p>
-            Yes. Sendvia is open source and transparent by design.
-          </p>
-          <p>
-            <strong>GitHub:</strong>
-            <a href="https://github.com/sendvia/sendvia.github.io" target="_blank" rel="noopener noreferrer">
-              View source code
-            </a>
-          </p>
-          <h3>Is Sendvia free?</h3>
-          <p>
-            Yes. Sendvia is completely free to use with no subscriptions or limits.
-          </p>
-          <h3>Is this secure?</h3>
-          <p>
-            Transfers are encrypted end-to-end using WebRTC’s built-in security.
-            Only the sender and receiver can access the files.
-          </p>
-          <h3>Does Sendvia track users?</h3>
-          <p>
-            No analytics, no ads, no tracking, and no user profiling.
-          </p>
-          <h3>Who made this?</h3>
-          <p>
-            Sendvia is developed and maintained independently with a focus on
-            privacy, simplicity, and clean design.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!---------------------- HELP SECTION ---------------------->
-
-    <div id="helpModal" class="help-modal">
-      <div class="help-content">
-        <div class="help-header">
-          <span>Help Section</span>
-          <button id="helpClose" aria-label="Close help">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-        <div class="help-body">
-          <div class="help-grid">
-            <div class="help-item">
-              <h3>1. Start a transfer</h3>
-              <p>Click “Drop a file to share” and select the file you want to send.</p>
-              <img src="images/Description1.png" alt="Drop a file to start transfer">
-            </div>
-            <div class="help-item">
-              <h3>2. Select your file</h3>
-              <p>Choose any file from your device to begin the upload.</p>
-              <img src="images/Description2.png" alt="Select file from device">
-            </div>
-            <div class="help-item">
-              <h3>3. Upload to the website</h3>
-              <p>Wait while the file is securely prepared for sharing.</p>
-              <img src="images/Description3.png" alt="Uploading file">
-            </div>
-            <div class="help-item">
-              <h3>4. Copy the generated code</h3>
-              <p>Once the upload is complete, copy the unique transfer code.</p>
-              <img src="images/Description4.png" alt="Copy transfer code">
-            </div>
-            <div class="help-item">
-              <h3>5. Use the QR option (optional)</h3>
-              <p>Click “Show QR” to display a scannable QR code instead.</p>
-              <img src="images/Description5.png" alt="QR code option">
-            </div>
-            <div class="help-item">
-              <h3>6. Share with the recipient</h3>
-              <p>Send the code or link to the person you want to share the file with.</p>
-              <img src="images/Description6.png" alt="Share link or code">
-            </div>
-            <div class="help-item">
-              <h3>7. Or copy the link</h3>
-              <p>You can also manually copy and share the link.</p>
-              <img src="images/Description7.png" alt="Copy link">
-            </div>
-            <div class="help-item">
-              <h3>8. Enter the transfer code</h3>
-              <p>Paste the received code on the website to access the file.</p>
-              <img src="images/Description8.png" alt="Enter transfer code">
-            </div>
-            <div class="help-item">
-              <h3>9. Download the file</h3>
-              <p>Click “Download File” to receive the shared file.</p>
-              <img src="images/Description9.png" alt="Download file">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!------------------------ Changelog Modal ------------------------>
-    <div id="changelogModal" class="changelog-modal">
-      <div class="changelog-content">
-        <div class="changelog-header">
-          <span>Changelog</span>
-          <button id="closeChangelog" aria-label="Close changelog">
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
+  <div id="aboutModal" class="about-modal">
+    <div class="about-content">
+      <div class="about-header">
+        <span>About Section</span>
+        <button id="aboutClose" aria-label="Close help">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-        </div>
-        <div id="changelogBody" class="changelog-body">
-          Loading…
+      </div>
+      <!-- BODY -->
+      <div class="about-body">
+        <h1>About Sendvia</h1>
+        <p>
+          Sendvia is a fast, simple, and privacy-focused file sharing tool designed
+          for direct transfers between people — no accounts, no ads, no storage.
+        </p>
+        <h3>Why did I create this?</h3>
+        <p>
+          Most file-sharing platforms are bloated, slow, or invasive.
+          Sendvia was built to be lightweight, distraction-free, and focused on
+          doing one thing well: sending files directly.
+        </p>
+        <h3>How does Sendvia work?</h3>
+        <p>
+          Files are transferred directly between the sender and receiver using
+          peer-to-peer technology (WebRTC). A temporary code is only used to
+          establish the connection.
+        </p>
+        <h3>Are my files stored on any server?</h3>
+        <p>
+          <strong>No.</strong> Files are never uploaded, stored, logged, or backed up.
+          They move directly from sender to receiver.
+        </p>
+        <ul>
+          <li>No cloud storage</li>
+          <li>No file history</li>
+          <li>No access to your data</li>
+        </ul>
+        <h3>What data is stored?</h3>
+        <p>
+          Only minimal, temporary connection data (such as a transfer code and
+          signaling information) is stored to help peers connect.
+          This data is removed automatically after use.
+        </p>
+        <h3>Is Sendvia open source?</h3>
+        <p>
+          Yes. Sendvia is open source and transparent by design.
+        </p>
+        <p>
+          <strong>GitHub:</strong>
+          <a href="https://github.com/sendvia/sendvia.github.io" target="_blank" rel="noopener noreferrer">
+            View source code
+          </a>
+        </p>
+        <h3>Is Sendvia free?</h3>
+        <p>
+          Yes. Sendvia is completely free to use with no subscriptions or limits.
+        </p>
+        <h3>Is this secure?</h3>
+        <p>
+          Transfers are encrypted end-to-end using WebRTC's built-in security.
+          Only the sender and receiver can access the files.
+        </p>
+        <h3>Does Sendvia track users?</h3>
+        <p>
+          No analytics, no ads, no tracking, and no user profiling.
+        </p>
+        <h3>Who made this?</h3>
+        <p>
+          Sendvia is developed and maintained independently with a focus on
+          privacy, simplicity, and clean design.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!---------------------- HELP SECTION ---------------------->
+
+  <div id="helpModal" class="help-modal">
+    <div class="help-content">
+      <div class="help-header">
+        <span>Help Section</span>
+        <button id="helpClose" aria-label="Close help">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="help-body">
+        <div class="help-grid">
+          <div class="help-item">
+            <h3>1. Start a transfer</h3>
+            <p>Click "Drop a file to share" and select the file you want to send.</p>
+            <img src="images/Description1.png" alt="Drop a file to start transfer">
+          </div>
+          <div class="help-item">
+            <h3>2. Select your file</h3>
+            <p>Choose any file from your device to begin the upload.</p>
+            <img src="images/Description2.png" alt="Select file from device">
+          </div>
+          <div class="help-item">
+            <h3>3. Upload to the website</h3>
+            <p>Wait while the file is securely prepared for sharing.</p>
+            <img src="images/Description3.png" alt="Uploading file">
+          </div>
+          <div class="help-item">
+            <h3>4. Copy the generated code</h3>
+            <p>Once the upload is complete, copy the unique transfer code.</p>
+            <img src="images/Description4.png" alt="Copy transfer code">
+          </div>
+          <div class="help-item">
+            <h3>5. Use the QR option (optional)</h3>
+            <p>Click "Show QR" to display a scannable QR code instead.</p>
+            <img src="images/Description5.png" alt="QR code option">
+          </div>
+          <div class="help-item">
+            <h3>6. Share with the recipient</h3>
+            <p>Send the code or link to the person you want to share the file with.</p>
+            <img src="images/Description6.png" alt="Share link or code">
+          </div>
+          <div class="help-item">
+            <h3>7. Or copy the link</h3>
+            <p>You can also manually copy and share the link.</p>
+            <img src="images/Description7.png" alt="Copy link">
+          </div>
+          <div class="help-item">
+            <h3>8. Enter the transfer code</h3>
+            <p>Paste the received code on the website to access the file.</p>
+            <img src="images/Description8.png" alt="Enter transfer code">
+          </div>
+          <div class="help-item">
+            <h3>9. Download the file</h3>
+            <p>Click "Download File" to receive the shared file.</p>
+            <img src="images/Description9.png" alt="Download file">
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!------------------------ Changelog Modal ------------------------>
+  <div id="changelogModal" class="changelog-modal">
+    <div class="changelog-content">
+      <div class="changelog-header">
+        <span>Changelog</span>
+        <button id="closeChangelog" aria-label="Close changelog">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      </div>
+      <div id="changelogBody" class="changelog-body">
+        Loading…
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -904,3 +904,124 @@ if (privacyBtn) {
         window.open('/privacy-terms', '_blank', 'noopener,noreferrer');
     });
 }
+
+// ==================== 3D TILT EFFECT ====================
+const container = document.querySelector('.container');
+if (container && !window.matchMedia('(pointer: coarse)').matches) {
+    container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 30;
+        const rotateY = (centerX - x) / 30;
+        
+        container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    
+    container.addEventListener('mouseleave', () => {
+        container.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        container.style.transition = 'transform 0.5s ease';
+        setTimeout(() => {
+            container.style.transition = '';
+        }, 500);
+    });
+}
+
+// ==================== BUTTON RIPPLE EFFECT ====================
+function createRipple(e, button) {
+    const ripple = document.createElement('span');
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    ripple.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0);
+        animation: rippleEffect 0.6s ease-out;
+        left: ${x}px;
+        top: ${y}px;
+        pointer-events: none;
+    `;
+    
+    button.style.position = 'relative';
+    button.style.overflow = 'hidden';
+    button.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
+}
+
+// Add ripple effect to all buttons
+document.querySelectorAll('.btn, .share-btn').forEach(button => {
+    button.addEventListener('click', (e) => createRipple(e, button));
+});
+
+// Add ripple keyframes dynamically
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
+    @keyframes rippleEffect {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(rippleStyle);
+
+// ==================== SUCCESS CONFETTI ====================
+function showConfetti() {
+    const colors = ['#667eea', '#764ba2', '#f093fb', '#78ff96', '#78dbff', '#ffc864'];
+    const confettiCount = 100;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.cssText = `
+            position: fixed;
+            width: ${Math.random() * 10 + 5}px;
+            height: ${Math.random() * 10 + 5}px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            left: ${Math.random() * 100}vw;
+            top: -20px;
+            border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+            z-index: 9999;
+            pointer-events: none;
+            animation: confettiFall ${Math.random() * 3 + 2}s linear forwards;
+        `;
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+// Add confetti keyframes
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = `
+    @keyframes confettiFall {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(confettiStyle);
+
+// Trigger confetti on successful transfer
+const originalShowStatus = showStatus;
+showStatus = function(message, type) {
+    originalShowStatus(message, type);
+    if (type === 'success' && message.includes('✓ Downloaded') || message.includes('✓ All files sent')) {
+        showConfetti();
+    }
+};
