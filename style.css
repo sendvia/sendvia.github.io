@@ -1754,6 +1754,47 @@ h1 {
     padding: 5px 10px;
   }
   
+  /* Mobile top controls - fix overlap */
+  .top-controls {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-top: 0;
+  }
+  
+  .theme-toggle {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .glass-mode-btn {
+    position: relative;
+    right: 0;
+    top: 0;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+  }
+  
+  body.minimal-mode .theme-toggle {
+    left: 0;
+  }
+  
+  body.minimal-mode .glass-mode-btn {
+    right: 0;
+  }
+  
   /* Mobile modals */
   .changelog-modal, .help-modal, .about-modal {
     align-items: flex-end;
